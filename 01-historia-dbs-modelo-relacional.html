@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Historia de las Bases de Datos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Título y Bienvenida -->
+            <section>
+                <h1>Historia de las Bases de Datos</h1>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <!-- Slide 2: ¿Qué es la Información? -->
+            <section>
+                <section>
+                    <h2>¿Qué es la Información?</h2>
+                    <p>La información es un recurso estructurado y procesado a partir de datos, utilizado para tomar decisiones y resolver problemas.</p>
+                </section>
+                <section>
+                    <h2>Relación entre Conceptos</h2>
+                    <ul>
+                        <li><strong>Datos:</strong> Elementos sin contexto (e.g., "123").</li>
+                        <li><strong>Información:</strong> Datos organizados (e.g., "123 representa un ID").</li>
+                        <li><strong>Conocimiento:</strong> Uso de la información para decisiones.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Ejemplo</h2>
+                    <p>En un hospital, los datos como nombre y edad se convierten en información al organizarse en historiales médicos. Que se convierten en conocimiento cuando se diagnostica.</p>
+                </section>
+            </section>
+
+            <!-- Slide 3: Evolución de la Información -->
+            <section>
+                <section>
+                    <h2>Evolución de la Información</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Pictogramas y registros manuales: Primeros sistemas para registrar datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Archivos computarizados: Años 60, almacenamiento secuencial en cintas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Modelo relacional: Introducido en 1970, permitió almacenar datos en tablas estructuradas con relaciones claras.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Impacto</h2>
+                    <p>La evolución tecnológica ha permitido manejar grandes volúmenes de información de manera más eficiente.</p>
+                </section>
+            </section>
+
+            <!-- Slide 4: ¿Qué es un Sistema de Ficheros? -->
+            <section>
+                <section>
+                    <h2>¿Qué es un Sistema de Ficheros?</h2>
+                    <p>Un sistema de ficheros es un método utilizado por el sistema operativo para almacenar, organizar y acceder a datos en dispositivos de almacenamiento como discos duros, SSDs o cintas.</p>
+                </section>
+                <section>
+                    <h2>Componentes Principales</h2>
+                    <ul>
+                        <li>Archivos: Colecciones de datos relacionados.</li>
+                        <li>Directorios: Estructuras jerárquicas que agrupan archivos.</li>
+                        <li>Bloques de almacenamiento: Unidades físicas donde se guardan los datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Ejemplo Práctico</h2>
+                    <p>Un archivo de texto se guarda como una colección de datos en bloques, referenciados por su ruta en un directorio (e.g., C:/documentos/archivo.txt).</p>
+                </section>
+            </section>
+
+            <!-- Slide 5: Ventajas de los Sistemas de Ficheros -->
+            <section>
+                <section>
+                    <h2>Ventajas de los Sistemas de Ficheros</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Simplicidad: Fácil de implementar y comprender para sistemas pequeños.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Bajo costo: Ideal para dispositivos con recursos limitados.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Independencia: No necesita software adicional más allá del sistema operativo.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 6: Limitaciones de los Sistemas de Ficheros -->
+            <section>
+                <section>
+                    <h2>Limitaciones de los Sistemas de Ficheros</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Redundancia de datos: Múltiples copias de la misma información pueden generar inconsistencias.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Falta de integridad: No hay mecanismos automáticos para garantizar la consistencia de los datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Dificultad en la recuperación de datos: Buscar datos específicos entre múltiples archivos puede ser complicado y lento.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Escalabilidad limitada: Diseñado para manejar cantidades pequeñas de datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Falta de seguridad: No existen controles avanzados de acceso ni auditorías.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 7: Transición hacia las Bases de Datos -->
+            <section>
+                <section>
+                    <h2>Transición hacia las Bases de Datos</h2>
+                </section>
+                <section>
+                    <p>Problemas en los sistemas de ficheros llevaron a la creación de bases de datos relacionales:</p>
+                    <ul>
+                        <li>Eliminan redundancias.</li>
+                        <li>Garantizan integridad.</li>
+                        <li>Facilitan consultas optimizadas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>Introducción al modelo relacional como solución.</p>
+                </section>
+            </section>
+
+            <!-- Slide 8: Introducción a las Bases de Datos -->
+            <section>
+                <section>
+                    <h2>Introducción a las Bases de Datos</h2>
+                </section>
+                <section>
+                    <h3>¿Qué es una base de datos?</h3>
+                    <p>Una base de datos es una colección organizada de datos relacionados que permite un acceso eficiente y estructurado.</p>
+                </section>
+                <section>
+                    <h3>Beneficios</h3>
+                    <ul>
+                        <li>Reducción de redundancias.</li>
+                        <li>Acceso rápido y eficiente a la información.</li>
+                        <li>Mejora de la consistencia e integridad de los datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>Conceptos básicos: Tablas, claves primarias y claves foráneas.</p>
+                </section>
+            </section>
+
+            <!-- Slide 9: Historia del Modelo Relacional -->
+            <section>
+                <section>
+                    <h2>Historia del Modelo Relacional</h2>
+                </section>
+                <section>
+                    <h3>Edgar F. Codd</h3>
+                    <p>
+                        <img src="https://upload.wikimedia.org/wikipedia/en/5/58/Edgar_F_Codd.jpg" alt="">
+                    </p>
+                    <p>Matemático británico, creador del modelo relacional en 1970.</p>
+                    <p>Publicación del artículo: "A Relational Model of Data for Large Shared Data Banks".</p>
+                </section>
+                <section>
+                    <h2>Características Principales</h2>
+                    <ul>
+                        <li>Tablas como estructuras básicas para organizar datos.</li>
+                        <li>Relaciones claras mediante claves primarias y foráneas.</li>
+                        <li>Basado en la teoría de conjuntos y lógica de primer orden.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 10: Problemas de los Sistemas Previos al Modelo Relacional -->
+            <section>
+                <section>
+                    <h2>Problemas de los Sistemas Previos al Modelo Relacional</h2>
+                </section>
+                <section>
+                    <h3>Sistemas jerárquicos</h3>
+                    <p>Estructura tipo árbol. Rigidez al manejar relaciones complejas. Ejemplo: IBM IMS.</p>
+                </section>
+                <section>
+                    <h3>Sistemas en red</h3>
+                    <p>Relacionaban datos mediante grafos. Más flexibles pero difíciles de consultar. Ejemplo: Integrated Database Management System (IDMS).</p>
+                </section>
+            </section>
+
+            <!-- Slide 11: Evolución del Modelo Relacional -->
+            <section>
+                <section>
+                    <h2>Evolución del Modelo Relacional</h2>
+                </section>
+                <section>
+                    <h3>70's</h3>
+                    <p>IBM desarrolla el prototipo System R.</p>
+                </section>
+                <section>
+                    <h3>80's</h3>
+                    <p>Surgimiento de sistemas comerciales como Oracle Database y IBM DB2.</p>
+                </section>
+                <section>
+                    <h3>90's</h3>
+                    <p>Dominio del modelo relacional en la industria; expansión hacia sectores como finanzas, salud y comercio.</p>
+                </section>
+            </section>
+
+            <!-- Slide 12: Impacto del Modelo Relacional -->
+            <section>
+                <section>
+                    <h2>Impacto del Modelo Relacional</h2>
+                </section>
+                <section>
+                    <h3>Adopción masiva</h3>
+                    <p>Presente en industrias como banca, salud, gobierno y educación.</p>
+                </section>
+                <section>
+                    <h3>Estandarización con SQL</h3>
+                    <p>Lenguaje universal para consultas relacionales.</p>
+                </section>
+                <section>
+                    <h3>Innovación continua</h3>
+                    <p>Sistemas híbridos como PostgreSQL que integran datos estructurados y semiestructurados.</p>
+                </section>
+                <section>
+                    <h3>Reconocimiento</h3>
+                    <p>Edgar Codd recibe el premio Turing en 1981.</p>
+                </section>
+            </section>
+
+            <!-- Slide 13: Introducción a los DBMS Relacionales -->
+            <section>
+                <section>
+                    <h2>Introducción a los DBMS Relacionales</h2>
+                    <p>Los DBMS relacionales son herramientas diseñadas para almacenar, organizar y consultar datos estructurados en tablas.</p>
+                </section>
+            </section>
+
+            <!-- Slide 14: SQLite -->
+            <section>
+                <section>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/3/38/SQLite370.svg" alt="SQLite Logo" style="width: 300px;">
+                    <h3>SQLite</h3>
+                    <p>DBMS ligero y embebido que no requiere configuración de servidor.</p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <p>Libre, fácil de usar, ideal para apps móviles y prototipos.</p>
+                </section>
+                <section>
+                    <h3>Desventajas</h3>
+                    <p>No diseñado para aplicaciones con alta concurrencia.</p>
+                </section>
+                <section>
+                    <h3>Usos comúnes</h3>
+                    <p>Bases de datos locales en aplicaciones móviles.</p>
+                </section>
+            </section>
+
+            <!-- Slide 15: MySQL -->
+            <section>
+                <section>
+                    <img src="https://upload.wikimedia.org/wikipedia/en/d/dd/MySQL_logo.svg" alt="SQLite Logo" style="width: 300px;">
+                    <h3>MySql</h3>
+                    <p>Creado en 1995; adquirido por Oracle Corporation. Popular por su uso en aplicaciones web.</p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <p>Amplio soporte, rendimiento alto, excelente documentación.</p>
+                </section>
+                <section>
+                    <h3>Desventajas</h3>
+                    <p>Algunas funciones avanzadas limitadas en la versión libre.</p>
+                </section>
+                <section>
+                    <h3>Usos comúnes</h3>
+                    <p>Aplicaciones móviles.</p>
+                </section>
+            </section>
+
+            <!-- Slide 16: MariaDB -->
+            <section>
+                <section>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/ca/MariaDB_colour_logo.svg" alt="SQLite Logo" style="width: 300px;">
+                    <h3>MariaDB</h3>
+                    <p>Fork de MySQL creado en 2009 por los desarrolladores originales.</p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <p>Más rápido que MySQL, completamente libre.</p>
+                </section>
+                <section>
+                    <h3>Desventajas</h3>
+                    <p>Menor adopción en herramientas de terceros.</p>
+                </section>
+                <section>
+                    <h3>Usos comúnes</h3>
+                    <p>Sustitución directa de MySQL.</p>
+                </section>
+            </section>
+
+            <!-- Slide 17: Microsoft SQL Server -->
+            <section>
+                <section>
+                    <h3>Microsoft SQL Server</h3>
+                    <p>DBMS desarrollado por Microsoft.</p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <p>Integración robusta con herramientas como Power BI y Visual Studio. Soporte empresaria.</p>
+                </section>
+                <section>
+                    <h3>Desventajas</h3>
+                    <p>Licencias comerciales costosas.</p>
+                </section>
+                <section>
+                    <h3>Usos comúnes</h3>
+                    <p>Sistemas empresariales basados en Windows.</p>
+                </section>
+            </section>
+
+            <!-- Slide 18: PostgreSQL -->
+            <section>
+                <section>
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/2/29/Postgresql_elephant.svg" alt="SQLite Logo" style="width: 300px;">
+                    <h3>PostgreSQL</h3>
+                    <p>DBMS avanzado, conocido por su extensibilidad.</p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <p>Soporte para JSON, vistas materializadas y funciones avanzadas, altamente extensible.</p>
+                </section>
+                <section>
+                    <h3>Desventajas</h3>
+                    <p>Curva de aprendizaje pronunciada y mayor consumo de recursos</p>
+                </section>
+                <section>
+                    <h3>Usos comúnes</h3>
+                    <p>Aplicaciones empresariales y científicas.</p>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
