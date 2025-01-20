@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Título y Bienvenida -->
+            <section>
+                <h1>Data Base Management System</h1>
+                <h2>DBMS</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <section>
+                <img src="./assets/rel.jpeg" alt="rel" class="r-stretch">
+            </section>
+
+            <!-- Slide 2: ¿Qué es un DBMS? -->
+            <section>
+                <section>
+                    <h2>¿Qué es un DBMS?</h2>
+                </section>
+                <section>
+                    <p>Un DBMS es un software que organiza, almacena y gestiona datos, permitiendo a los usuarios acceder, modificar y analizar información.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <p>Un banco utiliza un DBMS para gestionar cuentas y transacciones.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <p>Una red social organiza perfiles de usuario y publicaciones.</p>
+                </section>
+            </section>
+
+            <!-- Slide 3: Clasificación de DBMS por Modelo de Datos -->
+            <section>
+                <section>
+                    <h2>Clasificación por Modelo de Datos</h2>
+                </section>
+                <section>
+                    <h3>Relacionales (RDBMS)</h3>
+                    <p>Datos organizados en tablas, usan SQL para consultas.</p>
+                    <p>Ejemplo: MySQL, PostgreSQL.</p>
+                </section>
+                <section>
+                    <h3>NoSQL</h3>
+                    <p>Diseñados para datos no estructurados y escalabilidad horizontal.</p>
+                    <p>Ejemplo: MongoDB, Neo4j.</p>
+                </section>
+                <section>
+                    <h3>Jerárquicos</h3>
+                    <p>Estructura tipo árbol.</p>
+                    <p>Ejemplo: IBM IMS.</p>
+                </section>
+                <section>
+                    <h3>En Red</h3>
+                    <p>Relacionan datos mediante grafos.</p>
+                    <p>Ejemplo: Integrated DBMS.</p>
+                </section>
+            </section>
+
+            <!-- Slide 4: Relacionales vs. No Relacionales -->
+            <section>
+                <section>
+                    <h2>Relacionales vs. No Relacionales</h2>
+                </section>
+                <section>
+                    <h3>Relacionales</h3>
+                    <ul>
+                        <li>Estructura fija con tablas.</li>
+                        <li>Usan SQL como estándar.</li>
+                        <li>Ideal para aplicaciones transaccionales.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>No Relacionales</h3>
+                    <ul>
+                        <li>Flexibilidad para datos no estructurados.</li>
+                        <li>Escalabilidad horizontal.</li>
+                        <li>Ideal para big data y tiempo real.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 5: Clasificación por Tipo de Uso -->
+            <section>
+                <section>
+                    <h2>Clasificación por Tipo de Uso</h2>
+                </section>
+                <section>
+                    <h3>Centralizados</h3>
+                    <p>Toda la base de datos en un solo lugar.</p>
+                </section>
+                <section>
+                    <h3>Distribuidos</h3>
+                    <p>Datos replicados o fragmentados en múltiples ubicaciones.</p>
+                    <p>Ejemplo: Amazon DynamoDB.</p>
+                </section>
+                <section>
+                    <h3>En Memoria</h3>
+                    <p>Datos almacenados en RAM para mayor velocidad.</p>
+                    <p>Ejemplo: Redis.</p>
+                </section>
+            </section>
+
+            <!-- Slide 6: Arquitecturas de DBMS -->
+            <section>
+                <section>
+                    <h2>Arquitecturas de DBMS</h2>
+                </section>
+                <section>
+                    <h3>Monolítica</h3>
+                    <p>Todo integrado en una instancia.</p>
+                    <p>Ejemplo: SQLite.</p>
+                </section>
+                <section>
+                    <h3>Cliente-Servidor</h3>
+                    <p>Separación entre cliente y almacenamiento.</p>
+                    <p>Ejemplo: MySQL.</p>
+                </section>
+                <section>
+                    <h3>Multinivel</h3>
+                    <p>Grandes sistemas empresariales.</p>
+                    <p>Ejemplo: Oracle.</p>
+                </section>
+            </section>
+
+            <!-- Slide 7: ¿Cómo Funciona un DBMS? -->
+            <section>
+                <section>
+                    <h2>¿Cómo Funciona un DBMS?</h2>
+                </section>
+                <section>
+                    <ol>
+                        <li>El usuario envía una consulta.</li>
+                        <li>El DBMS la interpreta y planea su ejecución.</li>
+                    </ol>
+                </section>
+                <section>
+                    <ol start="3">
+                        <li>El motor de almacenamiento accede a los datos requeridos.</li>
+                        <li>Se envían los resultados al usuario.</li>
+                    </ol>
+                </section>
+            </section>
+
+            <!-- Slide 8: Almacenamiento de Datos en un DBMS -->
+            <section>
+                <section>
+                    <h2>Almacenamiento de Datos</h2>
+                </section>
+                <section>
+                    <h3>Tablas</h3>
+                    <p>Organizan datos en filas y columnas.</p>
+                </section>
+                <section>
+                    <h3>Índices</h3>
+                    <p>Mejoran la velocidad de búsqueda.</p>
+                </section>
+                <section>
+                    <h3>Espacios de Tablas</h3>
+                    <h4>Tablespaces</h4>
+                    <ul>
+                        <li>Donde residen físicamente las tablas e índices.</li>
+                        <li>Unidad lógica que agrupa uno o más archivos físicos.</li>
+                        <li>Segregación / Seguridad.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 9: Capas de Almacenamiento -->
+            <section>
+                <section>
+                    <h2>Capas de Almacenamiento</h2>
+                </section>
+                <section>
+                    <h3>Nivel Físico</h3>
+                    <p>Archivos y bloques en el disco.</p>
+                </section>
+                <section>
+                    <h3>Nivel Lógico</h3>
+                    <p>Tablas y relaciones.</p>
+                </section>
+                <section>
+                    <h3>Nivel Conceptual</h3>
+                    <p>La interfaz que perciben los usuarios.</p>
+                </section>
+                <section>
+                    <img src="./assets/query_tool.jpeg" alt="rel" class="r-stretch">
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
