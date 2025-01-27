@@ -1,0 +1,464 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diseño y Modelado ER</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Título -->
+            <section>
+                <h1>Modelo Entidad Relación (ER)</h1>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <section>
+                <section>
+                    <blockquote>Un diseño bien hecho desde el principio evita problemas en la implementación.</blockquote>
+                </section>
+            </section>
+
+            <!-- Slide 2: Introducción al Modelo ER -->
+            <section>
+                <section>
+                    <h2>¿Qué es el Modelo ER?</h2>
+                </section>
+                <section>
+                    <p><p>El modelo ER es una herramienta fundamental para representar datos y relaciones de manera clara y estructurada (UML) antes de implementarlos en un DBMS.</p></p>
+                </section>
+                <section>
+                    <h3>Objetivo Principal</h3>
+                    <p>Ofrecer un diseño conceptual independiente del sistema de gestión de bases de datos que se utilizará.</p>
+                    <p>Abstracción.</p>
+                </section>
+            </section>
+
+            <!-- Slide 3: Historia del Modelo ER -->
+            <section>
+                <section>
+                    <h2>Historia del Modelo ER</h2>
+                </section>
+                <section>
+                    <p>El modelo Entidad-Relación fue introducido en 1976 por <strong>Peter Chen</strong>. Motivado a proporcionar una herramienta visual que simplificara la representación de datos complejos.</p>
+                    <ul>
+                        <li>Adoptado en la academia y la industria.</li>
+                        <li>Base para diseños conceptuales en bases de datos relacionales.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 4: Componentes del Modelo ER -->
+            <section>
+                <section>
+                    <h2>Componentes del Modelo ER</h2>
+                </section>
+                <section>
+                    <p>El modelo ER consta de tres elementos clave:</p>
+                </section>
+                <section>
+                    <h3>Entidades</h3>
+                    <p>Representan objetos o conceptos del mundo real, como Clientes o Productos.</p>
+                </section>
+                <section>
+                    <h3>Atributos</h3>
+                    <p>Propiedades o características de las entidades, como Nombre o Correo Electrónico.</p>
+                </section>
+                <section>
+                    <h3>Relaciones</h3>
+                    <p>Asociaciones entre entidades, como &quot;Un cliente realiza un pedido&quot;.</p>
+                </section>
+            </section>
+
+            <!-- Slide 5: Claves en el Modelo ER -->
+            <section>
+                <section>
+                    <h2>Claves en el Modelo ER</h2>
+                </section>
+                <section>
+                    <h3>Clave Primaria (PK)</h3>
+                    <p>Atributo único que identifica a cada registro en una entidad.</p>
+                </section>
+                <section>
+                    <h3>Clave Foránea (FK)</h3>
+                    <p>Relación entre entidades mediante un atributo que apunta a la clave primaria de otra entidad.</p>
+                </section>
+                <section>
+                    <h3>Clave Compuesta</h3>
+                    <p>Se forma con dos o más atributos. Ejemplo: En <strong>DetallePedido</strong>, la clave primaria es la combinación de <code>pedido_id</code> y <code>producto_id</code>.</p>
+                </section>
+            </section>
+
+            <!-- Slide 6: Llaves Candidatas -->
+            <section>
+                <section>
+                    <h2>Llaves Candidatas</h2>
+                </section>
+                <section>
+                    <p>Son atributos que podrían ser seleccionados como clave primaria porque identifican de manera única cada registro. Ayudan a identificar la clave primaria más adecuada.</p>
+                </section>
+                <section>
+                    <p>Ejemplo: En una tabla de empleados, <code>empleado_id</code> y <code>seguro_social</code> son llaves candidatas.</p>
+                </section>
+            </section>
+
+            <!-- Slide 7: Tipos de Relaciones -->
+            <section>
+                <section>
+                    <h2>Tipos de Relaciones</h2>
+                </section>
+                <section>
+                    <h3>1:1</h3>
+                    <h4>Uno a Uno</h4>
+                    <p>Cada instancia de una entidad está relacionada con exactamente una instancia de otra entidad.</p>
+                    <br>
+                    <p>Un estudiante tiene una carrera.</p>
+                </section>
+                <section>
+                    <h3>1:N</h3>
+                    <h4>Uno a Múchos</h4>
+                    <p>Una instancia de una entidad puede estar relacionada con muchas instancias de otra entidad, pero no al revés.</p>
+                    <br>
+                    <p>Un estudiante tiene varias calificaciones.</p>
+                </section>
+                <section>
+                    <h3>N:M</h3>
+                    <h4>Múchos a Múchos</h4>
+                    <p>Muchas instancias de una entidad pueden estar relacionadas con muchas instancias de otra entidad.</p>
+                    <br>
+                    <p>Un estudiante puede inscribirse en varios cursos, y cada curso tiene varios estudiantes inscritos.</p>
+                </section>
+            </section>
+
+            <!-- Slide 8: Cardinalidad -->
+            <section>
+                <section>
+                    <h2>Cardinalidad</h2>
+                </section>
+                <section>
+                    <p>La cardinalidad define el número de veces que una instancia de una entidad puede asociarse con instancias de otra entidad.</p>
+                </section>
+                <section>
+                    <h3>Importancia</h3>
+                    <ul>
+                        <li>Define las reglas de negocio (¿puede un cliente tener múltiples cuentas bancarias?).</li>
+                        <li>Optimiza consultas y estructuras de datos.</li>
+                        <li>Valida las relaciones entre entidades.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 9: Diagramas ER -->
+            <section>
+                <section>
+                    <h2>Diagramas ER</h2>
+                </section>
+                <section>
+                    <p>Los diagramas ER son representaciones gráficas que muestran las entidades, atributos y relaciones de un sistema. Sirven como una herramienta visual para diseñar y comunicar la estructura conceptual de una base de datos.</p>
+                </section>
+                <section>
+                    <img src="./assets/er-diagram.png" alt="crows foot" class="r-stretch">
+                </section>
+                <section>
+                    <h3>Importancia de Estandarizar</h3>
+                    <ul>
+                        <li>Facilita la comunicación entre equipos.</li>
+                        <li>Aceleran el proceso de desarrollo.</li>
+                        <li>Reduce errores en la implementación.</li>
+                        <li>Mejora la mantenibilidad y escalabilidad.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 10: Atributos Multivaluados y Derivados -->
+            <section>
+                <section>
+                    <h2>Tipos de Atributos</h2>
+                </section>
+                <section>
+                    <h3>Atributos Multivaluados</h3>
+                    <p>Representan valores múltiples para un atributo.</p>
+                    <ul>
+                        <li>Ejemplo: Un cliente con varios números de teléfono.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>En el diseño físico, los atributos multivaluados suelen representarse como una tabla separada.</p>
+                    <ul>
+                        <li>Ejemplo: Una tabla cliente_telefonos podría tener cliente_id y numero_telefono.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Atributos Derivados</h3>
+                    <p>Calculados a partir de otros valores.</p>
+                    <ul>
+                        <li>Ejemplo: Edad calculada a partir de la fecha de nacimiento.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>Reducen la redundancia al no almacenar datos que pueden calcularse.</p>
+                    <p>Se deben calcular dinámicamente en consultas para mantener los datos consistentes.</p>
+                    <h1>¡CUIDADO!</h1>
+                </section>
+            </section>
+
+            <!-- Slide 11: Relaciones Débiles y Fuertes -->
+            <section>
+                <section>
+                    <h2>Tipos de Relaciones</h2>
+                </section>
+                <section>
+                    <h3>Relaciones Fuertes</h3>
+                    <p>Las entidades tienen claves primarias propias.</p>
+                    <ul>
+                        <li>Ejemplo: Cliente y Pedido.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Relaciones Débiles</h3>
+                    <p>Las entidades dependen de otras para identificarse.</p>
+                    <ul>
+                        <li>Ejemplo: DetallePedido necesita asociarse a un Pedido.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>Identificar relaciones fuertes y débiles permite estructurar el modelo ER de manera más precisa, priorizando la integridad referencial.</p>
+                </section>
+            </section>
+
+            <!-- Slide 12: Generalización y Especialización -->
+            <section>
+                <section>
+                    <h2>Jerarquías</h2>
+                </section>
+                <section>
+                    <h3>Generalización</h3>
+                    <p>Combina entidades específicas en una entidad general.</p>
+                    <ul>
+                        <li>Ejemplo: Carros y Motos se agrupan en Vehículos.</li>
+                        <li>Los atributos generales, como marca y modelo, se colocan en Vehículos</li>
+                    </ul>
+                </section>
+                <section>
+                    <h2>Especialización</h2>
+                    <p>Divide una entidad general en subentidades específicas.</p>
+                    <ul>
+                        <li>Ejemplo: Persona puede ser Cliente o Empleado.</li>
+                        <li>Cliente podría tener atributos específicos como historial_compras.</li>
+                        <li>Empleado podría tener atributos específicos como salario.</li>
+                    </ul>
+                </section>
+                <section>
+                    <p>Estos conceptos ayudan a organizar la estructura jerárquica de las entidades y facilitan el manejo de atributos comunes y específicos.</p>
+                </section>
+            </section>
+
+            <!-- Slide 13: Errores comúnes -->
+            <section>
+                <section>
+                    <h2>Errores Comúnes</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Redundancia de datos, lo que genera inconsistencias.</li>
+                        <li>Relaciones mal definidas o ausentes.</li>
+                        <li>Diseño que no escala bien para datos futuros.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Simbología a utilizar</h2>
+                </section>
+                <section>
+                    <h3>Notación de Martin o Crow's Foot</h3>
+                    <img src="./assets/er-symbols.png" alt="crows foot" class="r-stretch">
+                </section>
+                <section>
+                    <img src="./assets/er-relations.png" alt="crows foot relations" class="r-stretch">
+                </section>
+            </section>
+
+            <!-- Slide 14 o 15: notas++ -->
+             <section>
+                <section>
+                    <h2>Notas++</h2>
+                </section>
+                <section>
+                    <h3>Estuctura actual 😫</h3>
+                    <table style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>Carnet</th>
+                                <th>Nombre</th>
+                                <th>Actividad</th>
+                                <th>Fecha Tarea</th>
+                                <th>Fecha Calificación</th>
+                                <th>Nota</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>12345678</td>
+                                <td>Ada Lovelace</td>
+                                <td>Introducción a la Programación</td>
+                                <td>2025-01-10</td>
+                                <td>2025-01-15</td>
+                                <td>95</td>
+                            </tr>
+                            <tr>
+                                <td>87654321</td>
+                                <td>Grace Hopper</td>
+                                <td>Estructuras de Datos</td>
+                                <td>2025-01-12</td>
+                                <td>2025-01-18</td>
+                                <td>90</td>
+                            </tr>
+                            <tr>
+                                <td>11223344</td>
+                                <td>Linus Torvalds</td>
+                                <td>Introducción a Sistemas Operativos</td>
+                                <td>2025-01-14</td>
+                                <td>2025-01-20</td>
+                                <td>85</td>
+                            </tr>
+                            <tr>
+                                <td>44332211</td>
+                                <td>Margaret Hamilton</td>
+                                <td>Algoritmos Avanzados</td>
+                                <td>2025-01-15</td>
+                                <td>2025-01-21</td>
+                                <td>100</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section>
+                    <h3>Aplicando el Modelo Relacional 🤔</h3>
+                </section>
+                <section>
+                    <h3>Tabla: estudiantes 👩🏼‍🎓</h3>
+                    <table style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>carnet</th>
+                                <th>nombre</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>12345678</td>
+                                <td>Ada Lovelace</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>87654321</td>
+                                <td>Grace Hopper</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>11223344</td>
+                                <td>Linus Torvalds</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>44332211</td>
+                                <td>Margaret Hamilton</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section>
+                    <h2>Tabla: actividades 📚</h2>
+                    <table style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>nombre</th>
+                                <th>fecha</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>Introducción a la Programación</td>
+                                <td>2025-01-10</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>Estructuras de Datos</td>
+                                <td>2025-01-12</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>Introducción a Sistemas Operativos</td>
+                                <td>2025-01-14</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>Algoritmos Avanzados</td>
+                                <td>2025-01-15</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+                <section>
+                    <h3>Tabla: calificaciones 📝</h3>
+                    <table style="font-size: 14px;">
+                        <thead>
+                            <tr>
+                                <th>id</th>
+                                <th>estudiante_id</th>
+                                <th>actividad_id</th>
+                                <th>nota</th>
+                                <th>calificado_en</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>1</td>
+                                <td>95</td>
+                                <td>2025-01-15</td>
+                            </tr>
+                            <tr>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>2</td>
+                                <td>90</td>
+                                <td>2025-01-18</td>
+                            </tr>
+                            <tr>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>3</td>
+                                <td>85</td>
+                                <td>2025-01-20</td>
+                            </tr>
+                            <tr>
+                                <td>4</td>
+                                <td>4</td>
+                                <td>4</td>
+                                <td>100</td>
+                                <td>2025-01-21</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+             </section>
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
