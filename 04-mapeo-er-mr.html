@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mapeo de Diagramas ER a Esquemas Relacionales</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h2>Mapeo de Diagramas ER a Esquemas Relacionales</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+            
+            <section>
+                <h2>Objetivo</h2>
+                <ul>
+                    <li>Transformar un diagrama ER en un esquema relacional</li>
+                    <li>Aplicar reglas de mapeo</li>
+                    <li>Identificar errores comunes</li>
+                </ul>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 1</h2>
+                    <h3>Entidades Fuertes</h3>
+                </section>
+                <section>
+                    <h3>Se convierten en tablas con atributos como columnas</h3>
+                    <pre><code>clientes(id, nombre, correo)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 2</h2>
+                    <h3>Entidades Débiles</h3>
+                </section>
+                <section>
+                    <h3>Requieren clave foránea de la entidad fuerte</h3>
+                    <pre><code>tarjetas(id, cliente_id, expira_en)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 3</h2>
+                    <h3>Relaciones 1:1</h3>
+                </section>
+                <section>
+                    <h3>Llaves foráneas</h3>
+                    <pre><code>pasaportes(id, persona_id)</code></pre>
+                    <pre><code>personas(id, nombre)</code></pre>
+                </section>
+                <section>
+                    <h3>Fusionando tablas</h3>
+                    <pre><code>personas(id, pasaporte)</code></pre>
+                    <p>En este caso considerar que sea nullable.</p>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 4</h2>
+                    <h3>Relaciones 1:N</h3>
+                </section>
+                <section>
+                    <h3>Clave primaria de la entidad 1 se convierte en clave foránea en N</h3>
+                    <pre><code>clientes(id, nombre)
+ordenes(id, cliente_id, fecha)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 5</h2>
+                    <h3>Relaciones M:N</h3>
+                </section>
+                <section>
+                    <h3>Tabla intermedia con claves foráneas de ambas entidades</h3>
+                    <pre><code>estudiantes(id, nombre)
+cursos(id, nombre)
+estudiantes_cursos(id, estudiante_id, curso_id)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 6</h2>
+                    <h3>Atributos Multivaluados</h3>
+                </section>
+                <section>
+                    <h3>Se crean en una tabla separada con clave foránea</h3>
+                    <pre><code>profesores(id, nombre)
+profesor_telefonos(id, profesor_id, telefono)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Regla 7</h2>
+                    <h3>Generalización</h3>
+                </section>
+                <section>
+                    <h3>Tabla por entidad hija</h3>
+                    <pre><code>empleados(id, nombre, tipo)
+profesores(id, empleado_id, especialidad)
+administrador(id, empleado_id, departamento)</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <h2>Errores Comunes</h2>
+                <ul>
+                    <li>Omitir claves foráneas en 1:N</li>
+                    <li>No considerar atributos multivaluados</li>
+                    <li>No identificar cardinalidades</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
