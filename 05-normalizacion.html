@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a la Normalización de Bases de Datos</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h2>Introducción a la Normalización de Bases de Datos</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+            <section>
+                <section>
+                    <h2>¿Qué es la Normalización?</h2>
+                </section>
+                <section>
+                    <p>Proceso para organizar los datos reduciendo redundancias y mejorando la integridad.</p>
+                </section>
+            </section>
+            <section>
+                <section>
+                    <h2>¿Por qué es necesaria?</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Evita datos duplicados</li>
+                        <li>Minimiza inconsistencias</li>
+                        <li>Facilita la actualización y modificación de datos</li>
+                        <li>Optimiza almacenamiento y rendimiento</li>
+                    </ul>
+                </section>
+            </section>
+            <section>
+                <h2>Problemas de Bases de Datos No Normalizadas</h2>
+                <ul>
+                    <li>Redundancia de datos</li>
+                    <li>Anomalías de inserción</li>
+                    <li>Anomalías de eliminación</li>
+                    <li>Anomalías de actualización</li>
+                </ul>
+            </section>
+            <section>
+                <section>
+                    <h2>Teoría de Dependencias Funcionales</h2>
+                </section>
+                <section>
+                    <h3>Dependencias Funcionales</h3>
+                    <p>Un atributo B de una relación depende funcionalmente de otro atributo A si a todo valor de A le corresponde siempre el mismo valor de B.</p>
+                    <pre>
+                        <code>A -> B</code>
+                    </pre>
+                </section>
+                <section>
+                    <h3>En el contexto de bases de datos</h3>
+                    <p>Relación entre dos o más atributos de una tabla, donde el valor de uno de ellos determina el valor de los demás.</p>
+                </section>
+                <section>
+                    <p>A también es llamada <strong>Determinante</strong></p>
+                    <p>B también es llamada <strong>Dependiente</strong></p>
+                </section>
+                <section>
+                    <p>Podemos pensar que el determinante es el id de una tabla.</p>
+                </section>
+                <section>
+                    <p>Por ende el dependiente serían las demás columnas de la tabla.</p>
+                </section>
+                <section>
+                    <p>id -> nombre</p>
+                    <p>id -> email</p>
+                    <p>id -> telefono</p>
+                </section>
+                <section>
+                    <h3>Tipos</h3>
+                </section>
+                <section>
+                    <h3>Dependencia Funcional Completa</h3>
+                    <p>Un atributo depende completamente de la clave primaria.</p>
+                    <pre><code>(id_pedido, id_producto) → cantidad</code></pre>
+                    <p>Aquí, `cantidad` depende de ambos atributos, no de uno solo.</p>
+                </section>
+                <section>
+                    <h3>Dependencia Funcional Parcial</h3>
+                    <p>Un atributo depende solo de parte de la clave compuesta.</p>
+                    <pre><code>(id_pedido, id_producto) → nombre_producto</code></pre>
+                    <p>Aquí, `nombre_producto` depende solo de `id_producto`, no del pedido.</p>
+                </section>
+                <section>
+                    <h3>Dependencia Funcional Transitiva</h3>
+                    <p>Un atributo depende de otro atributo que no es clave.</p>
+                    <pre><code>id_cliente → id_ciudad → nombre_ciudad</code></pre>
+                    <p>Aquí, `id_ciudad` es dependiente de `id_cliente`, y `nombre_ciudad` depende de `id_ciudad`, lo que puede causar problemas.</p>
+                </section>
+            </section>
+            <section>
+                <h2>Ventajas de Aplicar la Normalización</h2>
+                <ul>
+                    <li>Evita la redundancia de datos</li>
+                    <li>Asegura la integridad referencial</li>
+                    <li>Facilita la actualización de datos</li>
+                    <li>Optimiza el espacio de almacenamiento</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Errores Comunes en Normalización</h2>
+                <ul>
+                    <li>No identificar correctamente las dependencias funcionales</li>
+                    <li>Eliminar redundancia sin considerar consultas futuras</li>
+                    <li>Sobre-normalizar</li>
+                    <li>Pensar que normalizar es siempre la mejor solución</li>
+                </ul>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
