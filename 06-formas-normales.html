@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Normalización y Formas Normales</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js/dist/theme/black.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            
+            <!-- Portada -->
+            <section>
+                <h2>Normalización y Formas Normales</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <section>
+                <h3>Dependencias Funcionales</h3>
+                <p>Ocurre cuando un atributo determina el valor de otro.</p>
+                <p>Ejemplo: DPI → Nombre, Fecha de Nacimiento</p>
+            </section>
+
+            <section>
+                <h3>Clave Primaria</h3>
+                <p>Un identificador único de cada fila.</p>
+                <ul>
+                    <li>Unicidad</li>
+                    <li>Minimalidad</li>
+                    <li>No nulidad</li>
+                </ul>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Anomalías en Bases de Datos</h2>
+                </section>
+                <section>
+                    <h3>Anomalía de Inserción</h3>
+                    <p>Ocurre cuando no podemos insertar datos sin depender de otra información innecesaria.</p>
+                    <p><strong>Ejemplo:</strong> No podemos registrar un cliente sin que tenga al menos un pedido.</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>Cliente</th><th>Dirección</th><th>Producto</th><th>Cantidad</th></tr>
+                        <tr><td> </td><td>Juan Pérez</td><td>Zona 1</td><td>NULL</td><td>NULL</td></tr>
+                    </table>
+                </section>
+                
+                <section>
+                    <h3>Anomalía de Eliminación</h3>
+                    <p>Ocurre cuando al eliminar un dato, perdemos información importante.</p>
+                    <p><strong>Ejemplo:</strong> Si eliminamos el pedido de un cliente, también perdemos sus datos.</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>Cliente</th><th>Dirección</th><th>Producto</th><th>Cantidad</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td><td>Laptop</td><td>1</td></tr>
+                        <tr><td>2</td><td>María López</td><td>Zona 5</td><td>Celular</td><td>2</td></tr>
+                    </table>
+                    <p>Si eliminamos el PedidoID 1, también perdemos la dirección de Juan Pérez.</p>
+                </section>
+                
+                <section>
+                    <h3>Anomalía de Actualización</h3>
+                    <p>Ocurre cuando debemos actualizar la misma información en múltiples lugares, generando inconsistencias.</p>
+                    <p><strong>Ejemplo:</strong> Si la dirección de un cliente cambia, debemos modificarla en todas sus filas.</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>Cliente</th><th>Dirección</th><th>Producto</th><th>Cantidad</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td><td>Laptop</td><td>1</td></tr>
+                        <tr><td>3</td><td>Juan Pérez</td><td>Zona 1</td><td>Teclado</td><td>1</td></tr>
+                    </table>
+                    <p>Si Juan Pérez se muda, debemos actualizar la dirección en todas sus filas.</p>
+                </section>
+            </section>
+
+            <section>
+                <section><h2>Formas Normales</h2></section>
+                <section>
+                    <h3>¿Qué son?</h3>
+                    <p>Conjunto de reglas para estructurar una base de datos.</p>
+                    <p>Objetivo: Minimizar redundancia y mejorar integridad.</p>
+                </section>
+            </section>
+
+            <!-- Primera Forma Normal (1NF) -->
+            <section>
+                <section><h2>Primera Forma Normal (1NF)</h2></section>
+                <section>
+                    <h3>Definición</h3>
+                    <ul>
+                        <li>Eliminar grupos repetitivos</li>
+                        <li>Cada celda debe contener un único valor</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplo NO en 1NF</h3>
+                    <table>
+                        <tr><th>Cliente</th><th>Teléfono</th></tr>
+                        <tr><td>Juan</td><td>555-1234, 555-5678</td></tr>
+                        <tr><td>María</td><td>555-8765</td></tr>
+                    </table>
+                </section>
+                <section>
+                    <h3>Ejemplo corregido</h3>
+                    <table>
+                        <tr><th>Cliente</th><th>Teléfono</th></tr>
+                        <tr><td>Juan</td><td>555-1234</td></tr>
+                        <tr><td>Juan</td><td>555-5678</td></tr>
+                        <tr><td>María</td><td>555-8765</td></tr>
+                    </table>
+                </section>
+            </section>
+
+            <!-- Segunda Forma Normal (2NF) -->
+            <section>
+                <section><h2>Segunda Forma Normal (2NF)</h2></section>
+                <section>
+                    <h3>Definición</h3>
+                    <ul>
+                        <li>Debe cumplir 1NF</li>
+                        <li>Eliminar dependencias parciales</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplo NO en 2NF</h3>
+                    <table>
+                        <tr><th>PedidoID</th><th>ProductoID</th><th>ClienteNombre</th></tr>
+                        <tr><td>1</td><td>101</td><td>Juan Pérez</td></tr>
+                    </table>
+                </section>
+                <section>
+                    <h3>Ejemplo corregido</h3>
+                    <p>Tabla Pedidos</p>
+                    <table>
+                        <tr><th>PedidoID</th><th>ClienteID</th></tr>
+                        <tr><td>1</td><td>1</td></tr>
+                    </table>
+                    <p>Tabla Clientes</p>
+                    <table>
+                        <tr><th>ClienteID</th><th>ClienteNombre</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td></tr>
+                    </table>
+                </section>
+            </section>
+
+            <!-- Tercera Forma Normal (3NF) -->
+            <section>
+                <section><h2>Tercera Forma Normal (3NF)</h2></section>
+                <section>
+                    <h3>Definición</h3>
+                    <ul>
+                        <li>Debe cumplir 2NF</li>
+                        <li>Eliminar dependencias transitivas</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplo NO en 3NF</h3>
+                    <table>
+                        <tr><th>ClienteID</th><th>Nombre</th><th>Ciudad</th><th>CódigoPostal</th></tr>
+                        <tr><td>1</td><td>Juan</td><td>Madrid</td><td>28001</td></tr>
+                        <tr><td>2</td><td>María</td><td>Barcelona</td><td>08002</td></tr>
+                    </table>
+                </section>
+                <section>
+                    <h3>Ejemplo corregido</h3>
+                    <p>Tabla Ciudades</p>
+                    <table>
+                        <tr><th>Ciudad</th><th>CódigoPostal</th></tr>
+                        <tr><td>Madrid</td><td>28001</td></tr>
+                        <tr><td>Barcelona</td><td>08002</td></tr>
+                    </table>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Forma Normal de Boyce-Codd (BCNF)</h2>
+                    <p>Es una versión más estricta de la 3NF que elimina ciertas dependencias problemáticas.</p>
+                </section>
+                
+                <section>
+                    <h3>Reglas de BCNF</h3>
+                    <ul>
+                        <li>Debe cumplir con la Tercera Forma Normal (3NF).</li>
+                        <li>Para cada dependencia funcional X → Y, X debe ser una clave candidata.</li>
+                    </ul>
+                </section>
+                
+                <section>
+                    <h3>Ejemplo de tabla NO en BCNF</h3>
+                    <p>Tenemos una relación entre profesores, materias y aulas:</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>Profesor</th><th>Materia</th><th>Aula</th></tr>
+                        <tr><td>Pérez</td><td>Matemáticas</td><td>101</td></tr>
+                        <tr><td>López</td><td>Historia</td><td>202</td></tr>
+                    </table>
+                    <p>Problema: Un aula está asociada con una materia, no con el profesor.</p>
+                </section>
+                
+                <section>
+                    <h3>Solución en BCNF</h3>
+                    <p>Dividimos la tabla en dos para eliminar la dependencia incorrecta:</p>
+                    <p><strong>Tabla Profesores-Materias</strong></p>
+                    <table style="font-size: 18px;">
+                        <tr><th>Profesor</th><th>Materia</th></tr>
+                        <tr><td>Pérez</td><td>Matemáticas</td></tr>
+                        <tr><td>López</td><td>Historia</td></tr>
+                    </table>
+                    <p><strong>Tabla Materias-Aulas</strong></p>
+                    <table style="font-size: 18px;">
+                        <tr><th>Materia</th><th>Aula</th></tr>
+                        <tr><td>Matemáticas</td><td>101</td></tr>
+                        <tr><td>Historia</td><td>202</td></tr>
+                    </table>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h3>¿Cuándo detenerse?</h3>
+                    <p>Balance entre normalización y rendimiento.</p>
+                </section>
+                <section>
+                    <p>En sistemas de reportes o análisis de datos, puede ser beneficioso mantener datos redundantes para mejorar la velocidad de consulta.</p>
+                </section>
+                <section>
+                    <p><strong>Ejemplo:</strong> Un sistema de analítica de ventas con una tabla preprocesada:</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>VentaID</th><th>Fecha</th><th>Cliente</th><th>Producto</th><th>Total</th></tr>
+                        <tr><td>1</td><td>2024-02-07</td><td>Juan Pérez</td><td>Laptop</td><td>1200</td></tr>
+                        <tr><td>2</td><td>2024-02-07</td><td>María Gómez</td><td>Celular</td><td>800</td></tr>
+                    </table>
+                    <p>En vez de hacer múltiples uniones en tiempo real, esta tabla almacena los datos preprocesados, acelerando los reportes.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Actividad Práctica</h2>
+                    <h3>Normalización Paso a Paso</h3>
+                    <p>Vamos a transformar una tabla mal estructurada aplicando las reglas de normalización.</p>
+                </section>
+                
+                <section>
+                    <h3>Paso 1: Tabla Inicial (No Normalizada)</h3>
+                    <p>Esta es nuestra tabla original con redundancias y anomalías:</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>Cliente</th><th>Dirección</th><th>Producto</th><th>Cantidad</th><th>Precio</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td><td>Laptop</td><td>1</td><td>1200</td></tr>
+                        <tr><td>2</td><td>María López</td><td>Zona 5</td><td>Celular</td><td>2</td><td>800</td></tr>
+                        <tr><td>3</td><td>Juan Pérez</td><td>Zona 1</td><td>Teclado</td><td>1</td><td>50</td></tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h3>Paso 2: Aplicando 1NF</h3>
+                    <p>Eliminamos valores múltiples en una celda y aseguramos que cada columna contenga valores atómicos.</p>
+                    <p>Si un cliente realiza varios pedidos, cada pedido se repite en una fila.</p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>Cliente</th><th>Dirección</th><th>Producto</th><th>Cantidad</th><th>Precio</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td><td>Laptop</td><td>1</td><td>1200</td></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td><td>Teclado</td><td>1</td><td>50</td></tr>
+                        <tr><td>2</td><td>María López</td><td>Zona 5</td><td>Celular</td><td>2</td><td>800</td></tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h3>Paso 3: Aplicando 2NF</h3>
+                    <p>Identificamos la clave primaria y eliminamos dependencias parciales.</p>
+                    <p>Separaremos la información del cliente en una nueva tabla.</p>
+                    <p><strong>Tabla Pedidos</strong></p>
+                    <table style="font-size: 18px;">
+                        <tr><th>PedidoID</th><th>ClienteID</th></tr>
+                        <tr><td>1</td><td>1</td></tr>
+                        <tr><td>2</td><td>2</td></tr>
+                    </table>
+                    <p><strong>Tabla Clientes</strong></p>
+                    <table style="font-size: 14px;">
+                        <tr><th>ClienteID</th><th>Nombre</th><th>Dirección</th></tr>
+                        <tr><td>1</td><td>Juan Pérez</td><td>Zona 1</td></tr>
+                        <tr><td>2</td><td>María López</td><td>Zona 5</td></tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h3>Paso 4: Aplicando 3NF</h3>
+                    <p>Eliminamos dependencias transitivas. La dirección del cliente depende del ClienteID, no de PedidoID.</p>
+                    <p>Separaremos los productos en una tabla aparte.</p>
+                    <p><strong>Tabla Productos</strong></p>
+                    <table style="font-size: 18px;">
+                        <tr><th>ProductoID</th><th>Nombre</th><th>Precio</th></tr>
+                        <tr><td>101</td><td>Laptop</td><td>1200</td></tr>
+                        <tr><td>102</td><td>Celular</td><td>800</td></tr>
+                        <tr><td>103</td><td>Teclado</td><td>50</td></tr>
+                    </table>
+                </section>
+
+                <section>
+                    <h3>Paso 5: Resultado Final</h3>
+                    <p>Ahora nuestra base de datos está bien estructurada:</p>
+                    <ul>
+                        <li>La tabla <strong>Clientes</strong> almacena datos de clientes.</li>
+                        <li>La tabla <strong>Pedidos</strong> relaciona clientes con productos.</li>
+                        <li>La tabla <strong>Productos</strong> almacena información sobre los productos.</li>
+                    </ul>
+                    <p>Hemos reducido redundancia y evitado anomalías.</p>
+                </section>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize({
+            hash: true
+        });
+    </script>
+</body>
+</html>
