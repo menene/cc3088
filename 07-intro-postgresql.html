@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción a PostgreSQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>Introducción a PostgreSQL</h1>
+                <p>DBMS relacional avanzada y de código abierto.</p>
+                <p>Semestre 1, 2025</p>
+            </section>
+            
+            <section>
+                <section>
+                    <img src="assets/07-postgresql.png" alt="POSTGRESQL" width="40%">
+                    <h2>¿Qué es PostgreSQL?</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Sistema de gestión de bases de datos relacional (RDBMS).</li>
+                        <li>Software de código abierto con una comunidad activa.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Compatible con SQL estándar y con extensiones avanzadas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Soporte para transacciones (Atomicity, Consistency, Isolation and Durability)</li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Historia y Popularidad</h2>
+                </section>
+                <section>
+                    <h2>Historia y Popularidad</h2>
+                    <ul>
+                        <li>Iniciado en 1986 en Berkeley como parte del proyecto Ingres.</li>
+                        <li>Se convirtió en PostgreSQL en 1996, con enfoque en extensibilidad.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Hoy en día es utilizado por empresas como Apple, Facebook y Spotify.</li>
+                        <li>Reconocido por su estabilidad y capacidad de procesamiento de grandes volúmenes de datos.</li>
+                    </ul>
+                </section>
+            </section>
+
+            
+            <section>
+                <section>
+                    <h2>Casos de Uso</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Aplicaciones Web:</strong> PostgreSQL se usa en sistemas escalables con altos volúmenes de tráfico.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Análisis de Datos:</strong> Compatible con herramientas de BI y procesamiento masivo.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Sistemas Geoespaciales:</strong> A través de PostGIS, maneja datos espaciales para cartografía y análisis geográfico.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Banca y Finanzas:</strong> Ideal para sistemas transaccionales que requieren integridad y consistencia.</li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Arquitectura Cliente-Servidor</h2>
+                </section>
+                <section>
+                    <p>PostgreSQL sigue una arquitectura cliente-servidor que permite la escalabilidad.</p>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Servidor de PostgreSQL:</strong>
+                            <ul>
+                                <li>Ejecuta procesos backend para gestionar consultas.</li>
+                                <li>Utiliza buffers y caché para mejorar el rendimiento.</li>
+                                <li>Maneja la autenticación y permisos de los clientes.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Cliente PostgreSQL:</strong>
+                            <ul>
+                                <li>Pueden ser interfaces gráficas (pgAdmin, DBeaver).</li>
+                                <li>Pueden ser scripts o aplicaciones que se conectan vía librerías como psycopg2 (Python) o JDBC (Java).</li>
+                                <li>Envía consultas SQL y recibe resultados del servidor.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Comunicación entre Cliente y Servidor:</strong>
+                            <ul>
+                                <li>Uso del protocolo PostgreSQL a través de TCP/IP.</li>
+                                <li>Soporte para conexiones locales mediante sockets UNIX.</li>
+                                <li>Implementación de SSL/TLS para seguridad en conexiones remotas.</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Preparación para la Instalación</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Sistemas Operativos Soportados:</strong> Windows, Linux, macOS.</li>
+                        <li><strong>Métodos de Instalación:</strong></li>
+                            <ul>
+                                <li>Paquetes oficiales para cada sistema operativo.</li>
+                                <li>Uso de Docker para un entorno portátil y replicable.</li>
+                                <li>Implementación en la nube con AWS RDS, Google Cloud SQL.</li>
+                            </ul>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Sistemas Operativos Soportados:</strong> Windows, Linux, macOS.</li>
+                        <li><strong>Métodos de Instalación:</strong></li>
+                            <ul>
+                                <li>Paquetes oficiales para cada sistema operativo.</li>
+                                <li>Uso de Docker para un entorno portátil y replicable.</li>
+                                <li>Implementación en la nube con AWS RDS, Google Cloud SQL.</li>
+                            </ul>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
