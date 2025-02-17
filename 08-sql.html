@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Fundamentos de SQL</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/theme/dracula.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>SQL</h1>
+                <p>Semestre 1, 2025</p>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Conceptos Fundamentales</h2>
+                </section>
+                <section>
+                    <h3>Tablas</h3>
+                    <p>Ejemplo de una tabla:</p>
+                    <table>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Edad</th>
+                            <th>Departamento</th>
+                        </tr>
+                        <tr>
+                            <td>1</td>
+                            <td>Juan Pérez</td>
+                            <td>30</td>
+                            <td>Ventas</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>María López</td>
+                            <td>25</td>
+                            <td>Recursos Humanos</td>
+                        </tr>
+                    </table>
+                </section>
+                <section>
+                    <h3>Filas (Registros)</h3>
+                    <p>Ejemplo de una fila:</p>
+                    <table>
+                        <tr>
+                            <td>2</td>
+                            <td>María López</td>
+                            <td>25</td>
+                            <td>Recursos Humanos</td>
+                        </tr>
+                    </table>
+                </section>
+                <section>
+                    <h3>Columnas (Atributos)</h3>
+                    <p>Ejemplo de una columna:</p>
+                    <table>
+                        <tr>
+                            <th>Nombre</th>
+                        </tr>
+                        <tr>
+                            <td>Juan Pérez</td>
+                        </tr>
+                        <tr>
+                            <td>María López</td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Restricciones en SQL</h2>
+                </section>
+                <section>
+                    <h3>NOT NULL</h3>
+                    <p>Ejemplo de valores permitidos:</p>
+                    <ul>
+                        <li>"Juan Pérez" ✅</li>
+                        <li>"" ❌ (No permitido, no puede ser nulo)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>UNIQUE</h3>
+                    <p>Ejemplo de valores permitidos:</p>
+                    <ul>
+                        <li>"correo1@example.com" ✅</li>
+                        <li>"correo2@example.com" ✅</li>
+                        <li>"correo1@example.com" ❌ (No permitido, ya existe)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>CHECK</h3>
+                    <p>Ejemplo de valores permitidos:</p>
+                    <ul>
+                        <li>Edad: 25 ✅</li>
+                        <li>Edad: 17 ❌ (No permitido, debe ser mayor o igual a 18)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>DEFAULT</h3>
+                    <p>Ejemplo de valores por defecto:</p>
+                    <ul>
+                        <li>Estado del pedido: "pendiente" ✅ (valor por defecto si no se especifica otro)</li>
+                        <li>Estado del pedido: "en proceso" ✅</li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Introducción a SQL</h2>
+                </section>
+                <section>
+                    <h3>Historia y Características</h3>
+                    <ul>
+                        <li>SQL fue desarrollado en la década de 1970 en IBM.</li>
+                        <li>Es un lenguaje declarativo utilizado para la gestión de bases de datos relacionales.</li>
+                        <li>Permite definir, manipular y consultar datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Características de SQL</h3>
+                    <ul>
+                        <li>Lenguaje estándar para bases de datos relacionales.</li>
+                        <li>Independiente del sistema operativo y del motor de base de datos.</li>
+                        <li>Soporta integridad referencial y transacciones.</li>
+                    </ul>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Primeras Consultas en SQL</h2>
+                </section>
+                <section>
+                    <h3>SELECT todo</h3>
+                    <pre><code class="sql">SELECT * FROM empleados;</code></pre>
+                </section>
+                <section>
+                    <h3>SELECT con columnas específicas</h3>
+                    <pre><code class="sql">SELECT nombre, edad FROM empleados;</code></pre>
+                </section>
+                <section>
+                    <h3>SELECT con WHERE</h3>
+                    <pre><code class="sql">SELECT * FROM empleados WHERE edad > 30;</code></pre>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>Próximo tema: Lenguaje de Definición de Datos (DDL).</h2>
+                </section>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@4.5.0/dist/reveal.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
