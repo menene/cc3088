@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción al DDL en PostgreSQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <style>
+        pre {
+            background-color: #222;
+            color: #eee;
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        code {
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Portada -->
+            <section>
+                <h2>DDL</h2>
+                <h3>Data Definition Language</h3>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <!-- Slide 2: ¿Qué es el DDL? -->
+            <section>
+                <section>
+                    <h2>¿Qué es el DDL?</h2>
+                </section>
+                <section>
+                    <p>El Data Definition Language (DDL) es el conjunto de comandos SQL utilizados para definir y modificar la estructura de una base de datos.</p>
+                </section>
+                <section>
+                    <p>A diferencia del DML (Data Modification Language), que se encarga de manipular los datos, el DDL establece la arquitectura del sistema.</p>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Inmediatez:</strong> Los cambios se aplican de forma inmediata y permanente.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Estructura:</strong> Define objetos como tablas, índices, vistas, esquemas, etc.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Fundamental:</strong> Establece “qué es” la base de datos.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 3: ¿Para qué sirve el DDL? -->
+            <section>
+                <section>
+                    <h2>¿Para qué sirve el DDL?</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Diseño y Estructuración:</strong> Define la arquitectura fundamental de la base de datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Control de Integridad:</strong> Implementa restricciones para asegurar la calidad de los datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Evolución:</strong> Permite actualizar la estructura sin perder datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Documentación:</strong> Facilita la comprensión y colaboración entre desarrolladores.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>¿Por qué usar DDL?</h2>
+                </section>
+                <section>
+                    <h3>Automatización y Reproducibilidad</h3>
+                </section>
+                <section>
+                    <p>El código SQL se puede reutilizar para crear bases de datos idénticas en diferentes entornos.</p>
+                </section>
+                <section>
+                    <p>Las interfaces gráficas requieren configuraciones manuales que pueden ser propensas a errores.</p>
+                </section>
+                <section>
+                    <h3>Versionado y Control de Cambios</h3>
+                </section>
+                <section>
+                    <p>El DDL permite almacenar y rastrear los cambios en repositorios como Git.</p>
+                </section>
+                <section>
+                    <p>Las modificaciones en una interfaz gráfica no quedan documentadas automáticamente.</p>
+                </section>
+                <section>
+                    <h3>Mayor Flexibilidad</h3>
+                </section>
+                <section>
+                    <p>Con SQL puedes definir restricciones avanzadas, relaciones y optimizaciones.</p>
+                </section>
+                <section>
+                    <p>Las herramientas visuales suelen ser limitadas en personalización y ajustes avanzados.</p>
+                </section>
+            </section>
+
+            <section>
+                <h2>Comandos</h2>
+            </section>
+            
+            <!-- Slide 4: Comando CREATE -->
+            <section>
+                <section>
+                    <h2>CREATE</h2>
+                </section>
+                <section>
+                    <p>Se utiliza para crear nuevos objetos en la base de datos, tales como tablas, índices, vistas y más.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">CREATE TABLE empleados (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100)
+);</code></pre>
+                    <p>Crea una tabla simple con una clave primaria y una columna para el nombre.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">CREATE TABLE departamentos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    presupuesto NUMERIC CHECK (presupuesto > 0)
+);</code></pre>
+                    <p>Incluye restricciones para asegurar que se ingresen datos válidos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">CREATE TABLE proyectos (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(150) NOT NULL,
+    departamento_id INTEGER,
+    fecha_inicio DATE DEFAULT CURRENT_DATE,
+    presupuesto NUMERIC CHECK (presupuesto >= 1000),
+    CONSTRAINT fk_departamento FOREIGN KEY (departamento_id) REFERENCES departamentos(id)
+);</code></pre>
+                    <p>Combina clave foránea, restricciones y valor por defecto para relacionar con otra tabla.</p>
+                </section>
+            </section>
+
+            <!-- Slide 5: Comando ALTER -->
+            <section>
+                <section>
+                    <h2>ALTER</h2>
+                </section>
+                <section>
+                    <p>Permite modificar la estructura de objetos existentes en la base de datos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">ALTER TABLE empleados
+ADD COLUMN email VARCHAR(150);</code></pre>
+                    <p>Añade una nueva columna para almacenar correos electrónicos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">ALTER TABLE empleados
+ALTER COLUMN nombre TYPE VARCHAR(200);</code></pre>
+                    <p>Cambia el tipo de dato de la columna "nombre" para aumentar su capacidad.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">ALTER TABLE empleados
+ADD COLUMN correo_electronico VARCHAR(150),
+DROP COLUMN email,
+ADD CONSTRAINT chk_correo CHECK (correo_electronico LIKE '%@%'),
+RENAME COLUMN nombre TO nombre_completo;</code></pre>
+                    <p>Realiza múltiples cambios en una sola instrucción: agregar, eliminar, renombrar y agregar restricción.</p>
+                </section>
+            </section>
+
+            <!-- Slide 6: Comando DROP -->
+            <section>
+                <section>
+                    <h2>DROP</h2>
+                </section>
+                <section>
+                    <p>Se utiliza para eliminar objetos de la base de datos de forma permanente.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">DROP TABLE empleados;</code></pre>
+                    <p>Elimina la tabla "empleados" junto con sus datos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">DROP TABLE IF EXISTS departamentos;</code></pre>
+                    <p>Elimina la tabla "departamentos" solo si existe, evitando errores.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">DROP TABLE IF EXISTS proyectos CASCADE;</code></pre>
+                    <p>Elimina la tabla "proyectos" y todos los objetos dependientes usando la opción CASCADE.</p>
+                </section>
+            </section>
+
+            <!-- Slide 7: Comando TRUNCATE -->
+            <section>
+                <section>
+                    <h2>TRUNCATE</h2>
+                </section>
+                <section>
+                    <p>Vacía una tabla eliminando todos sus registros sin eliminar la estructura.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">TRUNCATE TABLE empleados;</code></pre>
+                    <p>Elimina rápidamente todos los registros de la tabla "empleados".</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">TRUNCATE TABLE departamentos RESTART IDENTITY;</code></pre>
+                    <p>Vacía la tabla "departamentos" y reinicia los contadores de identidad.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">TRUNCATE TABLE empleados, proyectos CASCADE;</code></pre>
+                    <p>Vacía múltiples tablas gestionando dependencias con la opción CASCADE.</p>
+                </section>
+            </section>
+
+            <!-- Slide 8: Comando COMMENT -->
+            <section>
+                <section>
+                    <h2>COMMENT</h2>
+                </section>
+                <section>
+                    <p>Se utiliza para agregar comentarios y documentación a los objetos de la base de datos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">COMMENT ON TABLE empleados IS 'Tabla que almacena datos de empleados';</code></pre>
+                    <p>Agrega un comentario descriptivo a la tabla "empleados".</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">COMMENT ON COLUMN empleados.nombre IS 'Nombre completo del empleado';</code></pre>
+                    <p>Documenta la columna "nombre" para clarificar su contenido.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">COMMENT ON CONSTRAINT chk_correo ON empleados IS 'Verifica que el correo electrónico contenga "@"';</code></pre>
+                    <p>Agrega una descripción a la restricción "chk_correo".</p>
+                </section>
+            </section>
+
+            <!-- Slide 9: Buenas Prácticas y Conclusiones -->
+            <section>
+                <section>
+                    <h2>Buenas Prácticas</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Documentación:</strong> Utiliza COMMENT y herramientas de versionado.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Pruebas:</strong> Realiza cambios en entornos controlados antes de producción.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Transacciones:</strong> Encapsula cambios para poder revertir en caso de error.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>Revisión:</strong> Verifica dependencias antes de modificar o eliminar objetos.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Automatización y Versionado de Scripts SQL</h2>
+                </section>
+                
+                <section>
+                    <h3>¿Por qué usar scripts SQL?</h3>
+                </section>
+
+                <section>
+                    <ul>
+                        <li>Permiten replicar la estructura de la base de datos en cualquier entorno.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <ul>
+                        <li>Facilitan la automatización del proceso de creación y actualización.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <ul>
+                        <li>Ayudan a mantener un registro de los cambios realizados.</li>
+                    </ul>
+                </section>
+            
+                <section>
+                    <h3>Creación y Ejecución de Scripts SQL</h3>
+                    <p>Podemos escribir nuestros comandos DDL en un archivo **.sql** y ejecutarlo en PostgreSQL.</p>
+                </section>
+
+                <section>
+                    <p><strong>Ejemplo:</strong> Creamos un archivo llamado <code>estructura.sql</code></p>
+                    <pre><code class="sql">
+-- Crear tabla de clientes
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    email VARCHAR(150) UNIQUE NOT NULL
+);
+                    </code></pre>
+                </section>
+            
+                <section>
+                    <h3>Ejecutar un Script SQL</h3>
+                    <p>Para ejecutar el archivo <code>estructura.sql</code> en PostgreSQL:</p>
+                    <pre><code class="bash">
+psql -U usuario -d basedatos -f estructura.sql
+                    </code></pre>
+                </section>
+
+                <section>
+                    <p>Donde:</p>
+                    <ul>
+                        <li><code>-U usuario</code>: Especifica el usuario de PostgreSQL.</li>
+                        <li><code>-d basedatos</code>: Define la base de datos donde correrá el script.</li>
+                        <li><code>-f estructura.sql</code>: Especifica el archivo SQL a ejecutar.</li>
+                    </ul>
+                </section>
+            
+                <section>
+                    <h3>Versionar Cambios</h3>
+                </section>
+
+                <section>
+                    <h3>GitHub</h3>
+                    <p>Subir los scripts a un repositorio:</p>
+                    <pre><code class="bash">
+git init
+git add estructura.sql
+git commit -m "Agrega script inicial de la base de datos"
+git push origin main
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Migraciones</h3>
+                    <p>Para manejar cambios en la base de datos de forma estructurada, podemos usar herramientas de migraciones tales como <strong>Flyaway</strong> o <strong>Liquibase</strong></p>
+                </section>
+            </section>            
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
