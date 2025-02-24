@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Introducción al DML en PostgreSQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h2>DML</h2>
+                <h3>Data Manipulation Language</h3>
+                <p>Semestre 1, 2025</p>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>¿Qué es el DML?</h2>
+                </section>
+                <section>
+                    <p>El Data Manipulation Language (DML) es un conjunto de comandos SQL usados para manipular los datos dentro de una base de datos.</p>
+                </section>
+                <section>
+                    <p>A diferencia del DDL, el DML no cambia la estructura de la base de datos, sino que trabaja sobre los datos existentes.</p>
+                </section>
+                <section>
+                    <h3>Características Clave</h3>
+                    <ul>
+                        <li>Permite insertar, actualizar, eliminar y consultar datos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Opera sobre registros, no sobre la estructura.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Generalmente trabaja en conjunto con transacciones.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <h3>Comandos</h3>
+            </section>
+
+            <section>
+                <section>
+                    <h2>SELECT</h2>
+                    <p>Se usa para consultar datos en una base de datos.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">
+SELECT * FROM empleados;
+                    </code></pre>
+                    <p>Selecciona todos los registros de la tabla `empleados`.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">
+SELECT nombre, salario
+FROM empleados
+WHERE cargo = 'Gerente'
+ORDER BY salario DESC;
+                    </code></pre>
+                    <p>Filtra empleados que son gerentes y ordena por salario.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">
+SELECT e.nombre, e.cargo, d.nombre AS departamento
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id;
+                    </code></pre>
+                    <p>Consulta con `JOIN` para mostrar el departamento de cada empleado.</p>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>INSERT</h2>
+                    <p>Se usa para insertar nuevos registros en una tabla.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">
+INSERT INTO empleados (nombre, cargo, salario)
+VALUES ('Juan Pérez', 'Desarrollador', 3500.00);
+                    </code></pre>
+                    <p>Inserta un solo registro en la tabla `empleados`.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">
+INSERT INTO empleados (nombre, cargo, salario)
+VALUES 
+('Ana López', 'Gerente', 5000.00),
+('Carlos Gómez', 'Analista', 3200.00);
+                    </code></pre>
+                    <p>Inserta múltiples registros en una sola consulta.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">
+INSERT INTO empleados (nombre, cargo, salario)
+SELECT nombre, 'Nuevo Cargo', salario * 1.1
+FROM empleados WHERE cargo = 'Analista';
+                    </code></pre>
+                    <p>Inserta registros basados en una consulta `SELECT`.</p>
+                </section>
+            </section>
+            
+            <section>
+                <section>
+                    <h2>UPDATE</h2>
+                    <p>Permite modificar registros existentes en una tabla.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">
+UPDATE empleados
+SET salario = 4000
+WHERE nombre = 'Juan Pérez';
+                    </code></pre>
+                    <p>Modifica el salario de un empleado específico.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">
+UPDATE empleados
+SET salario = salario * 1.05
+WHERE cargo = 'Analista';
+                    </code></pre>
+                    <p>Aumenta el salario de todos los empleados con el cargo "Analista".</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">
+UPDATE empleados
+SET salario = 
+    (SELECT AVG(salario) 
+        FROM empleados 
+        WHERE cargo = 'Gerente'
+    )
+WHERE cargo = 'Analista';
+                    </code></pre>
+                    <p>Actualiza el salario de los analistas con el salario promedio de los gerentes.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>DELETE</h2>
+                    <p>Se usa para eliminar registros de una tabla.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 1</h3>
+                    <pre><code class="sql">
+DELETE FROM empleados
+WHERE nombre = 'Juan Pérez';
+                    </code></pre>
+                    <p>Elimina un solo registro específico.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 2</h3>
+                    <pre><code class="sql">
+DELETE FROM empleados
+WHERE cargo = 'Analista';
+                    </code></pre>
+                    <p>Elimina todos los empleados con el cargo "Analista".</p>
+                </section>
+                <section>
+                    <h3>Ejemplo 3</h3>
+                    <pre><code class="sql">
+DELETE FROM empleados
+WHERE departamento_id IN 
+    (SELECT id 
+        FROM departamentos 
+        WHERE nombre = 'Ventas'
+    );
+                    </code></pre>
+                    <p>Elimina empleados que pertenezcan a un departamento específico.</p>
+                </section>
+            </section>
+        </div>
+    </div>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
