@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Operadores SQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide de Inicio -->
+            <section>
+                <h2>Operadores SQL</h2>
+                <p>Definiciones y Casos de Uso</p>
+            </section>
+
+            <!-- GROUP BY -->
+            <section>
+                <section>
+                    <h2>GROUP BY</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Agrupa filas con los mismos valores en columnas específicas y permite aplicar funciones de agregación.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa para generar reportes agrupados, como calcular ventas por categoría o total de empleados por departamento.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+SELECT 
+    categoria, 
+    SUM(ventas) 
+FROM productos 
+GROUP BY categoria;
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- ORDER BY -->
+            <section>
+                <section>
+                    <h2>ORDER BY</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Ordena los resultados de una consulta en orden ascendente o descendente según una o más columnas.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa para mostrar datos ordenados, como listar productos del más caro al más barato o empleados por antigüedad.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+SELECT 
+    nombre, 
+    ventas 
+FROM productos 
+ORDER BY ventas DESC;
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- Funciones de Agregación -->
+            <section>
+                <section>
+                    <h2>Funciones de Agregación</h2>
+                </section>
+                <section>
+                    <h3>SUM()</h3>
+                    <p>Calcula la suma total de una columna numérica.</p>
+                    <pre><code>
+SELECT SUM(salario) FROM empleados;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>COUNT()</h3>
+                    <p>Cuenta la cantidad de registros en un conjunto de datos.</p>
+                    <pre><code>
+SELECT COUNT(*) FROM empleados;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>AVG()</h3>
+                    <p>Calcula el promedio de los valores en una columna.</p>
+                    <pre><code>
+SELECT AVG(edad) FROM empleados;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>MIN() / MAX()</h3>
+                    <p>Encuentra el valor mínimo o máximo en un conjunto de datos.</p>
+                    <pre><code>
+SELECT MIN(salario), MAX(salario) FROM empleados;
+                    </code></pre>
+                </section>
+            </section>
+            
+
+            <!-- UNION -->
+            <section>
+                <section>
+                    <h2>UNION</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Combina los resultados de múltiples consultas en un solo conjunto de datos, eliminando duplicados.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa para fusionar información de diferentes fuentes, como listas de clientes de distintas regiones.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+SELECT 
+    nombre 
+FROM clientes_usa
+UNION
+SELECT 
+    nombre 
+FROM clientes_mexico;
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- UNION ALL -->
+            <section>
+                <section>
+                    <h2>UNION ALL</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Similar a `UNION`, pero mantiene duplicados en los resultados.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa cuando se necesita combinar conjuntos de datos sin perder información duplicada, como transacciones de distintos meses.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+SELECT 
+    nombre 
+FROM clientes_usa
+UNION ALL
+SELECT 
+    nombre 
+FROM clientes_mexico;
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- WITH -->
+            <section>
+                <section>
+                    <h2>WITH</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Crea una tabla temporal dentro de la consulta para mejorar la legibilidad y optimización.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa para calcular valores intermedios, como el promedio de salario y luego filtrar empleados con salario superior.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+WITH salario_promedio AS (
+    SELECT 
+        AVG(salario) AS promedio 
+    FROM empleados
+)
+SELECT 
+    * 
+FROM empleados 
+WHERE salario > 10000;
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>CASE WHEN THEN</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Permite evaluar condiciones dentro de una consulta y devolver diferentes resultados en función de dichas condiciones.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usa para crear nuevas categorías, manejar valores condicionales o transformar datos en consultas.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code>
+SELECT nombre, salario,
+    CASE 
+        WHEN salario > 5000 THEN 'Alto'
+        WHEN salario BETWEEN 3000 AND 5000 THEN 'Medio'
+        ELSE 'Bajo'
+    END AS categoria_salarial
+FROM empleados;
+                    </code></pre>
+                </section>
+            </section>
+            
+
+        </div>
+    </div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
