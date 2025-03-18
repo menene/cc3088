@@ -211,6 +211,159 @@ FROM empleados;
                     </code></pre>
                 </section>
             </section>
+
+            <section>
+                <section>
+                    <h2>Aliases en SQL</h2>
+                </section>
+                <section>
+                    <h3>Definición</h3>
+                    <p>Un alias permite asignar un nombre temporal a una columna o tabla en una consulta para hacerla más legible.</p>
+                </section>
+                <section>
+                    <h3>Caso de Uso</h3>
+                    <p>Se usan para mejorar la claridad en consultas complejas, abreviar nombres largos o mejorar la organización de los resultados.</p>
+                </section>
+                <section>
+                    <h3>Ejemplo para Columnas</h3>
+                    <pre><code>
+SELECT nombre AS empleado, salario AS sueldo
+FROM empleados;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo para Tablas</h3>
+                    <pre><code>
+SELECT e.nombre, e.salario, d.nombre AS departamento
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id;
+                    </code></pre>
+                </section>
+            </section>
+            
+
+            <!-- HAVING -->
+<section>
+    <section>
+        <h2>HAVING</h2>
+    </section>
+    <section>
+        <h3>Definición</h3>
+        <p>Filtra resultados después de aplicar una función de agregación en una consulta con GROUP BY.</p>
+    </section>
+    <section>
+        <p>A diferencia del `WHERE`, `HAVING` filtra luego de hacer la agregación y no fila por fila.</p>
+    </section>
+    <section>
+        <h3>Caso de Uso</h3>
+        <p>Se usa cuando queremos filtrar grupos de datos, como mostrar solo las categorías con más de 500 ventas.</p>
+    </section>
+    <section>
+        <h3>Ejemplo</h3>
+        <pre><code>
+SELECT categoria, SUM(ventas) AS total_ventas
+FROM productos
+GROUP BY categoria
+HAVING SUM(ventas) > 500;
+        </code></pre>
+    </section>
+</section>
+
+<!-- SUBCONSULTAS -->
+<section>
+    <section>
+        <h2>Subconsultas</h2>
+    </section>
+    <section>
+        <h3>Definición</h3>
+        <p>Una consulta dentro de otra consulta, utilizada para obtener valores dinámicos o realizar filtros avanzados.</p>
+    </section>
+    <section>
+        <h3>Caso de Uso</h3>
+        <p>Se usa cuando necesitamos valores calculados en tiempo real, como seleccionar empleados con un salario mayor al promedio.</p>
+    </section>
+    <section>
+        <h3>Ejemplo</h3>
+        <pre><code>
+SELECT nombre, salario
+FROM empleados
+WHERE salario > (SELECT AVG(salario) FROM empleados);
+        </code></pre>
+    </section>
+</section>
+
+<!-- INTRODUCCIÓN A JOINS -->
+<section>
+    <section>
+        <h2>Introducción a JOINs</h2>
+    </section>
+    <section>
+        <h3>Definición</h3>
+        <p>Permiten combinar datos de múltiples tablas basándose en una relación común.</p>
+    </section>
+    <section>
+        <h3>Caso de Uso</h3>
+        <p>Se usan para unir información de diferentes fuentes, como obtener las ventas de cada producto junto con su categoría.</p>
+    </section>
+    <section>
+        <h3>Ejemplo</h3>
+        <pre><code>
+SELECT p.nombre, p.ventas, c.nombre AS categoria
+FROM productos p
+JOIN categorias c ON p.categoria_id = c.id;
+        </code></pre>
+    </section>
+</section>
+<section>
+    <section>
+        <h2>INNER JOIN</h2>
+    </section>
+    <section>
+        <h3>Definición</h3>
+        <p>Une dos tablas y devuelve solo las filas donde hay coincidencias en ambas tablas.</p>
+    </section>
+    <section>
+        <h3>Caso de Uso</h3>
+        <p>Se usa cuando queremos obtener datos relacionados entre dos tablas, como productos con su respectiva categoría.</p>
+    </section>
+    <section>
+        <h3>Ejemplo</h3>
+        <pre><code>
+SELECT p.nombre, c.nombre AS categoria
+FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id;
+        </code></pre>
+    </section>
+</section>
+
+<!-- Diferencia entre JOIN e INNER JOIN -->
+<section>
+    <section>
+        <h2>Diferencia entre JOIN y INNER JOIN</h2>
+    </section>
+    <section>
+        <h3>¿Cuál es la diferencia?</h3>
+        <p>No hay diferencia funcional, ya que en SQL `JOIN` por defecto es `INNER JOIN`.</p>
+    </section>
+    <section>
+        <h3>Ejemplo usando JOIN</h3>
+        <pre><code>
+SELECT p.nombre, c.nombre AS categoria
+FROM productos p
+JOIN categorias c ON p.categoria_id = c.id;
+        </code></pre>
+    </section>
+    <section>
+        <h3>Ejemplo usando INNER JOIN</h3>
+        <pre><code>
+SELECT p.nombre, c.nombre AS categoria
+FROM productos p
+INNER JOIN categorias c ON p.categoria_id = c.id;
+        </code></pre>
+    </section>
+</section>
+
+
             
 
         </div>
