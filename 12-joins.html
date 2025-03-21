@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Joins en PostgreSQL</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/white.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h2>Joins</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <section>
+                <section><h2>¿Qué es un JOIN?</h2></section>
+                <section><p>Un <strong>JOIN</strong> permite combinar registros de dos o más tablas basándose en una relación entre columnas.</p></section>
+                <section><ul>
+                    <li>Se usa cuando necesitamos consultar datos que están en diferentes tablas.</li>
+                    <li>Las relaciones suelen establecerse con claves foráneas.</li>
+                </ul></section>
+            </section>
+
+            <section>
+                <section><h2>Tipos de JOINs</h2></section>
+                <section>
+                    <img src="./assets/postgres-joins.png" alt="Joins" style="width: 100%;">
+                </section>
+            </section>
+
+            <section>
+                <section><h2>INNER JOIN</h2></section>
+                <section>
+                    <p>Devuelve las filas que tienen coincidencias en ambas tablas.</p>
+                    <img src="./assets/inner_join.png" alt="Inner Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT *
+FROM empleados e
+INNER JOIN departamentos d ON e.departamento_id = d.id;
+                </code></pre></section>
+                <section><p>Solo se muestran empleados que están asignados a un departamento existente.</p></section>
+            </section>
+
+            <section>
+                <section><h2>LEFT JOIN</h2></section>
+                <section>
+                    <p>Devuelve todas las filas de la tabla izquierda y las coincidencias de la tabla derecha. Si no hay coincidencia, muestra NULL.</p>
+                    <img src="./assets/left_join.png" alt="Left Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT *
+FROM empleados e
+LEFT JOIN departamentos d ON e.departamento_id = d.id;
+                </code></pre></section>
+                <section><p>Útil para identificar empleados sin departamento asignado.</p></section>
+            </section>
+
+            <section>
+                <section><h2>RIGHT JOIN</h2></section>
+                <section>
+                    <p>Devuelve todas las filas de la tabla derecha y las coincidencias de la tabla izquierda.</p>
+                    <img src="./assets/right_join.png" alt="Right Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT *
+FROM empleados e
+RIGHT JOIN departamentos d ON e.departamento_id = d.id;
+                </code></pre></section>
+                <section><p>Podemos ver qué departamentos no tienen empleados asignados.</p></section>
+            </section>
+
+            <section>
+                <section><h2>FULL OUTER JOIN</h2></section>
+                <section>
+                    <p>Devuelve todas las filas cuando hay coincidencia en una u otra tabla.</p>
+                    <img src="./assets/full_outer_join.png" alt="Full Outer Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT *
+FROM empleados e
+FULL OUTER JOIN departamentos d ON e.departamento_id = d.id;
+                </code></pre></section>
+                <section><p>Se incluyen empleados sin departamento y departamentos sin empleados.</p></section>
+            </section>
+
+            <section>
+                <section><h2>CROSS JOIN</h2></section>
+                <section>
+                    <p>Realiza el producto cartesiano de ambas tablas.</p>
+                    <img src="./assets/cross_join.png" alt="Cross Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT *
+FROM empleados CROSS JOIN turnos;
+                </code></pre></section>
+                <section><p>Genera todas las combinaciones posibles de registros.</p></section>
+            </section>
+
+            <section>
+                <section><h2>SELF JOIN</h2></section>
+                <section>
+                    <p>Una tabla se une consigo misma usando alias.</p>
+                    <img src="./assets/sefl_join.png" alt="Self Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT e1.nombre AS empleado, e2.nombre AS jefe
+FROM empleados e1
+JOIN empleados e2 ON e1.jefe_id = e2.id;
+                </code></pre></section>
+                <section><p>Útil para estructuras jerárquicas.</p></section>
+            </section>
+
+            <section>
+                <section><h2>NATURAL JOIN y USING</h2></section>
+                <section>
+                    <p><strong>NATURAL JOIN</strong> une las tablas automáticamente por columnas con el mismo nombre.</p>
+                    <img src="./assets/natural_join.png" alt="Natural Join">
+                </section>
+                <section>
+                    <p><strong>USING</strong> permite simplificar la cláusula ON si la columna tiene el mismo nombre en ambas tablas.</p>
+                    <img src="./assets/using_join.png" alt="Using Join">
+                </section>
+                <section><pre><code class="sql">
+SELECT e.nombre, p.nombre AS proyecto
+FROM empleados_proyectos
+JOIN empleados e USING (empleado_id)
+JOIN proyectos p USING (proyecto_id);
+                </code></pre></section>
+            </section>
+
+            <section>
+                <section><h2>Buenas prácticas</h2></section>
+                <section>
+                    1️⃣ Usar alias para facilitar la lectura.
+                </section>
+                <section>
+                    2️⃣ Especificar siempre la condición ON (salvo USING).
+                </section>
+                <section>
+                    3️⃣ Cuidado con los NULL en LEFT/RIGHT/FULL JOINs.
+                </section>
+                <section>
+                    4️⃣ No abusar del CROSS JOIN.
+                </section>
+            </section>
+
+            <section>
+                <section><h2>Conclusiones</h2></section>
+                <section>
+                    1️⃣ Los JOINs son fundamentales para el análisis de datos.
+                </section>
+                <section>
+                    2️⃣ Cada tipo de JOIN tiene su uso dependiendo del contexto.
+                </section>
+                <section>
+                    3️⃣ La práctica constante es clave para dominarlos.
+                </section>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
