@@ -1,0 +1,697 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transacciones</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <!-- Slide 1: Portada -->
+            <section>
+                <h2>Transacciones</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <!-- Slide 2: Introducción a las Transacciones -->
+            <section>
+                <section><h2>¿Qué es una Transacción?</h2></section>
+                <section><p>Una transacción es una unidad lógica de trabajo en una base de datos que agrupa una o más operaciones que deben ejecutarse de manera atómica.</p></section>
+                <section><p>Son fundamentales para garantizar la integridad de los datos y el manejo seguro de operaciones que involucran múltiples modificaciones.</p></section>
+                <section><h3>¿Por qué son importantes?</h3></section>
+                <section><ul>
+                    <li>Garantizan la consistencia de los datos en sistemas críticos.</li>
+                </ul></section>
+                <section><ul>
+                    <li>Permiten el manejo seguro de operaciones complejas.</li>
+                </ul></section>
+                <section><ul>
+                    <li>Recuperan el estado ante errores.</li>
+                </ul></section>
+                <section><ul>
+                    <li>Se usan en sistemas financieros, comercio electrónico y aplicaciones empresariales.</li>
+                </ul></section>
+                <section><h3>Ejemplos comunes de uso</h3></section>
+                <section><ul>
+                    <li>🏦 Transferencias bancarias.</li>
+                </ul></section>
+                <section><ul>
+                    <li>📦 Actualización de inventarios.</li>
+                </ul></section>
+                <section><ul>
+                    <li>🧾 Procesos de facturación.</li>
+                </ul></section>
+            </section>
+
+            <!-- Slide 3: Propiedades ACID -->
+            <section>
+                <section><h2>ACID</h2></section>
+                <section><h3>¿Qué es ACID?</h3>
+                    <p>El término ACID es un acrónimo que describe las propiedades fundamentales que debe cumplir una transacción en una base de datos para garantizar la integridad y consistencia de los datos.</p>
+                </section>
+                <section>
+                    <p>Estas propiedades son esenciales en sistemas de gestión de bases de datos relacionales como PostgreSQL, donde el manejo seguro y coherente de los datos es una prioridad.</p>
+                </section>
+                <section>
+                    <p>ACID garantiza que las operaciones realizadas en una transacción se completen de manera confiable, incluso en situaciones de fallos del sistema o concurrencia.</p>
+                </section>
+                <section><h3>ACID en Bases de Datos</h3>
+                    <p>Las transacciones en sistemas de bases de datos son secuencias de operaciones que se ejecutan como una sola unidad lógica. Para que una transacción se considere segura, debe cumplir con las siguientes propiedades:</p>
+                </section>
+                <section>
+                    <ul>
+                        <li>Atomicidad</li>
+                        <li>Consistencia</li>
+                        <li>Aislamiento</li>
+                        <li>Durabilidad</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Atomicidad</h3>
+                </section>
+                <section>
+                    <p>La atomicidad garantiza que todas las operaciones de una transacción se realicen por completo o no se realice ninguna. Si alguna operación falla, el sistema debe asegurarse de que no se apliquen cambios parciales.</p>
+                </section>
+                <section>
+                    <p>Ejemplo: En una transferencia bancaria, si se descuenta el dinero de una cuenta pero no se acredita en la otra, el sistema debe revertir la transacción para evitar inconsistencias.</p>
+                </section>
+                <section>
+                    <p>Comandos relacionados: <code>BEGIN</code>, <code>COMMIT</code>, <code>ROLLBACK</code>.</p>
+                </section>
+                <section>
+                    <h3>Consistencia</h3>
+                </section>
+                <section>
+                    <p>La consistencia garantiza que una transacción lleve la base de datos de un estado válido a otro estado válido, respetando todas las reglas de integridad y restricciones.</p>
+                </section>
+                <section>
+                    <p>Ejemplo: Si en una tabla de cuentas bancarias el saldo no puede ser negativo, una transacción que provoque esta situación debe fallar para mantener la consistencia.</p>
+                </section>
+                <section>
+                    <p>La consistencia también se refiere a mantener integridad referencial, restricciones de unicidad y validaciones lógicas.</p>
+                </section>
+                <section>
+                    <h3>Aislamiento</h3>
+                </section>
+                <section>
+                    <p>El aislamiento garantiza que las transacciones concurrentes no interfieran entre sí, de modo que el resultado final sea el mismo que si se ejecutaran secuencialmente.</p>
+                </section>
+                <section>
+                    <p>PostgreSQL maneja el aislamiento a través de niveles, desde el más permisivo (Read Uncommitted) hasta el más restrictivo (Serializable).</p>
+                </section>
+                <section>
+                    <p>Ejemplo: Si dos usuarios intentan modificar el mismo registro al mismo tiempo, el sistema debe garantizar que solo uno de los cambios sea persistido.</p>
+                </section>
+                <section>
+                    <h3>Durabilidad</h3>
+                </section>
+                <section>
+                    <p>La durabilidad asegura que, una vez que una transacción se ha confirmado (COMMIT), los cambios persistan permanentemente en el almacenamiento, incluso si ocurre un fallo del sistema inmediatamente después.</p>
+                </section>
+                <section>
+                    <p>Ejemplo: Si una transacción registra una venta y se confirma, el registro debe mantenerse aun si el servidor se apaga posteriormente.</p>
+                </section>
+                <section>
+                    <p>PostgreSQL asegura la durabilidad utilizando el registro WAL (Write-Ahead Logging), que garantiza que los cambios se escriban en el almacenamiento antes de confirmarlos.</p>
+                </section>
+            </section>
+
+            <section>
+                <section><h2>Comandos Básicos</h2></section>
+                <section><h3>BEGIN, COMMIT, ROLLBACK</h3>
+                    <p>Los comandos básicos para manejar transacciones en PostgreSQL son:</p>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>BEGIN:</strong> Inicia una nueva transacción. Permite agrupar múltiples sentencias SQL como una sola unidad de trabajo.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>COMMIT:</strong> Finaliza la transacción y guarda todos los cambios realizados.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>ROLLBACK:</strong> Revierte todos los cambios realizados durante la transacción si ocurre un error o se decide cancelar.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplo: Actualización de saldo en una cuenta bancaria</h3>
+                </section>
+                <section>
+                    <p>Supongamos que queremos transferir 100 unidades de la cuenta 1 a la cuenta 2. Si ocurre un error, revertiremos la operación.</p>
+                </section>
+                <section>
+                    <pre><code class="sql">
+-- Iniciar la transacción
+BEGIN;
+
+-- Restar 100 unidades de la cuenta 1
+UPDATE cuentas SET saldo = saldo - 100 WHERE id = 1;
+
+-- Sumar 100 unidades a la cuenta 2
+UPDATE cuentas SET saldo = saldo + 100 WHERE id = 2;
+
+-- Confirmar los cambios
+COMMIT;
+                                            </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo: Uso de ROLLBACK</h3>
+                </section>
+                <section>
+                    <p>Si se detecta un error durante el proceso, usamos <strong>ROLLBACK</strong> para revertir los cambios.</p>
+                </section>
+                <section>
+                    <pre><code class="sql">
+BEGIN;
+
+-- Intento de transferencia
+UPDATE cuentas SET saldo = saldo - 100 WHERE id = 1;
+
+-- Verificar si el saldo es negativo
+SELECT saldo FROM cuentas WHERE id = 1;
+
+-- Si el saldo es negativo, revertir la transacción
+ROLLBACK;
+
+COMMIT;
+                    </code></pre>
+                </section>
+            </section>
+            
+
+            <!-- Slide 5: Manejo de Errores y Rollback -->
+            <section>
+                <section><h2>Manejo de Errores con SAVEPOINT</h2></section>
+                <section><p>Uso de SAVEPOINT para rollback parcial en transacciones complejas.</p></section>
+                <section><pre><code class="sql">
+BEGIN;
+SAVEPOINT sp1;
+INSERT INTO ventas (producto, cantidad) VALUES ('Libro', 10);
+ROLLBACK TO sp1;
+COMMIT;
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- Slide 7: Problemas de Concurrencia -->
+            <section>
+                <section>
+                    <h2>Problemas de Concurrencia</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Lectura sucia</li>
+                        <li>Lectura no repetible</li>
+                        <li>Lectura fantasma</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Lectura Sucia (Dirty Read)</h3>
+                </section>
+                <section>
+                    <p>Ocurre cuando una transacción lee datos que aún no han sido confirmados por otra transacción. Si la transacción que escribió los datos hace un rollback, el valor leído queda inválido.</p>
+                </section>
+                <section>
+                    <h3>Lectura No Repetible (Non-Repeatable Read)</h3>
+                </section>
+                <section>
+                    <p>Ocurre cuando una transacción vuelve a leer un dato y encuentra que este ha cambiado debido a otro COMMIT realizado en otra transacción.</p>
+                </section>
+                <section>
+                    <h3>Lectura Fantasma (Phantom Read)</h3>
+                </section>
+                <section>
+                    <p>Ocurre cuando nuevas filas que cumplen la condición de la consulta son añadidas por otra transacción durante la ejecución de la transacción actual.</p>
+                </section>
+            </section>
+
+
+            <!-- niveles de aislamiento -->
+            <section>
+                <section><h2>Niveles de Aislamiento</h2></section>
+            
+                <!-- Read Uncommitted -->
+                <section>
+                    <h3>Read Uncommitted</h3>
+                </section>
+                <section>
+                    <p>Permite leer datos no confirmados por otras transacciones.</p>
+                    <p>Es el nivel de aislamiento más bajo y menos seguro.</p>
+                </section>
+                <section>
+                    <h4>Problema: Lectura Sucia (Dirty Read)</h4>
+                </section>
+            
+                <!-- Read Committed -->
+                <section>
+                    <h3>Read Committed</h3>
+                </section>
+                <section>
+                    <p>Solo permite leer datos que han sido confirmados por otras transacciones.</p>
+                    <p>Es el nivel de aislamiento predeterminado en PostgreSQL.</p>
+                </section>
+                <section>
+                    <h4>Problema: Lectura No Repetible (Non-Repeatable Read)</h4>
+                </section>
+            
+                <!-- Repeatable Read -->
+                <section>
+                    <h3>Repeatable Read</h3>
+                </section>
+                <section>
+                    <p>Evita lecturas no repetibles al garantizar que el conjunto de datos consultados no cambie durante la transacción.</p>
+                </section>
+                <section>
+                    <h4>Problema: Lectura Fantasma (Phantom Read)</h4>
+                </section>
+            
+                <!-- Serializable -->
+                <section>
+                    <h3>Serializable</h3>
+                </section>
+                <section>
+                    <p>Es el nivel de aislamiento más alto, garantiza que las transacciones se ejecuten como si fueran secuenciales.</p>
+                    <p>Evita tanto lecturas sucias como no repetibles y lecturas fantasma.</p>
+                </section>
+            
+                <!-- Comparación de Niveles -->
+                <section>
+                    <h3>Comparación de Niveles de Aislamiento</h3>
+                    <table style="font-size: 20px;">
+                        <tr>
+                            <th>Nivel</th>
+                            <th>Lectura Sucia</th>
+                            <th>Lectura No Repetible</th>
+                            <th>Lectura Fantasma</th>
+                        </tr>
+                        <tr>
+                            <td>Read Uncommitted</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Read Committed</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Repeatable Read</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td>Serializable</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                            <td>❌</td>
+                        </tr>
+                    </table>
+                </section>
+            </section>
+
+            <!-- bloqueo -->
+            <section>
+                <section><h2>Estrategias de Bloqueo</h2></section>
+            
+                <!-- Introducción a Bloqueos -->
+                <section>
+                    <p>El bloqueo es una técnica que garantiza la integridad y consistencia de los datos cuando múltiples transacciones intentan acceder simultáneamente a los mismos recursos.</p>
+                </section>
+                <section>
+                    <p>PostgreSQL utiliza varios tipos de bloqueos para evitar conflictos de concurrencia.</p>
+                </section>
+                <section>
+                    <p>Los bloqueos se pueden aplicar a nivel de fila o tabla, dependiendo del alcance de la operación.</p>
+                </section>
+            
+                <!-- Bloqueo de Fila -->
+                <section>
+                    <h3>Bloqueo de Fila (Row-Level Lock)</h3>
+                </section>
+                <section>
+                    <p>Este tipo de bloqueo permite restringir el acceso a una fila específica de una tabla mientras se realiza una operación.</p>
+                </section>
+                <section>
+                    <p>Es útil para evitar conflictos en operaciones que actualizan registros individuales.</p>
+                </section>
+                <section>
+                    <p>PostgreSQL utiliza bloqueos de fila de forma automática en operaciones como <code>UPDATE</code> o <code>DELETE</code>.</p>
+                </section>
+                <section>
+                    <h4>Tipos de Bloqueo de Fila</h4>
+                </section>
+                <section>                    
+                    <ul>
+                        <li><strong>FOR UPDATE:</strong> Bloquea la fila para actualización. Evita que otros la modifiquen.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>FOR NO KEY UPDATE:</strong> Similar al anterior, pero permite modificaciones en otros campos que no son claves.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>FOR SHARE:</strong> Permite la lectura compartida, pero no la modificación.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>FOR KEY SHARE:</strong> Permite actualizar claves foráneas, pero no los datos directamente.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h4>Ejemplo: Bloqueo de Fila</h4>
+                    <pre><code class="sql">
+-- Transacción 1: Bloqueo de fila para actualización
+BEGIN;
+SELECT * FROM cuentas WHERE id = 1 FOR UPDATE;
+
+-- Transacción 2: Intento de actualización bloqueado
+UPDATE cuentas SET saldo = saldo + 50 WHERE id = 1;
+
+-- Confirmar los cambios
+COMMIT;
+                    </code></pre>
+                </section>
+                <section>
+                    <p>En este caso, la segunda transacción queda en espera hasta que la primera complete su operación.</p>
+                </section>
+            
+                <!-- Bloqueo de Tabla -->
+                <section>
+                    <h3>Bloqueo de Tabla (Table-Level Lock)</h3>
+                </section>
+                <section>
+                    <p>Este tipo de bloqueo se aplica a toda la tabla, restringiendo el acceso a cualquier fila dentro de ella.</p>
+                </section>
+                <section>
+                    <p>Se utiliza cuando es necesario garantizar la integridad en operaciones que afectan múltiples filas simultáneamente.</p>
+                </section>
+                <section>
+                    <h4>Tipos de Bloqueo de Tabla</h4>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>ACCESS SHARE:</strong> Permite solo lectura. Utilizado en consultas (<code>SELECT</code>).</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>ROW SHARE:</strong> Permite leer mientras se realizan actualizaciones (<code>SELECT ... FOR UPDATE</code>).</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>EXCLUSIVE:</strong> Permite modificaciones sin bloqueo exclusivo.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><strong>ACCESS EXCLUSIVE:</strong> Bloquea completamente el acceso. Se utiliza en operaciones de <code>ALTER TABLE</code>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h4>Ejemplo: Bloqueo de Tabla</h4>
+                    <pre><code class="sql">
+-- Transacción 1: Bloqueo exclusivo en la tabla
+BEGIN;
+LOCK TABLE cuentas IN EXCLUSIVE MODE;
+
+-- Operación que bloquea toda la tabla para modificación
+UPDATE cuentas SET saldo = saldo - 50 WHERE id = 1;
+
+-- Otra transacción que intenta leer queda bloqueada
+SELECT * FROM cuentas;
+
+-- Confirmar cambios
+COMMIT;
+                    </code></pre>
+                </section>
+                <section>
+                    <p>El bloqueo exclusivo asegura que ninguna otra transacción pueda acceder a la tabla mientras se realiza la actualización.</p>
+                </section>
+            
+                <!-- Consideraciones sobre Bloqueos -->
+                <section>
+                    <h3>Consideraciones sobre el Uso de Bloqueos</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Usar bloqueos de fila cuando el impacto es solo en registros individuales.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Optar por bloqueos de tabla solo cuando se requiera garantizar la integridad en operaciones masivas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Bloqueos excesivos pueden causar problemas de rendimiento y cuellos de botella.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Usar explícitamente el comando <code>LOCK</code> solo cuando el manejo automático no sea suficiente.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section><h2>Cambiar los Niveles de Bloqueo</h2></section>
+            
+                <!-- Introducción -->
+                <section>
+                    <h3>¿Es posible cambiar los niveles de bloqueo?</h3>
+                </section>
+                <section>
+                    <p>En PostgreSQL, no se pueden cambiar directamente los niveles de bloqueo predeterminados a nivel de DBMS.</p>
+                </section>
+                <section>
+                    <p>El sistema de bloqueo está diseñado para ajustarse de manera óptima según el tipo de operación que se realiza.</p>
+                </section>
+            
+                <!-- Cambiar el Nivel de Aislamiento por Defecto -->
+                <section>
+                    <h3>Nivel de Aislamiento Predeterminado</h3>
+                </section>
+                <section>
+                    <p>En lugar de cambiar los niveles de bloqueo directamente, se puede modificar el <b>nivel de aislamiento predeterminado</b> para afectar el comportamiento del bloqueo.</p>
+                </section>
+                <section>
+                    <pre><code class="sql">
+ALTER DATABASE nombre_base_de_datos 
+SET default_transaction_isolation TO 'serializable';
+                    </code></pre>
+                </section>
+                <section>
+                    <p>Esto hará que todas las transacciones usen el nivel <code>SERIALIZABLE</code> si no se especifica explícitamente otro.</p>
+                </section>
+            
+                <!-- Consideraciones -->
+                <section>
+                    <h3>Consideraciones</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>El cambio afecta a todas las conexiones que no especifiquen un nivel explícito.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Algunos niveles, como <code>READ UNCOMMITTED</code>, no están soportados en PostgreSQL por razones de integridad.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>El nivel <code>SERIALIZABLE</code> garantiza la máxima consistencia pero puede afectar el rendimiento.</li>
+                    </ul>
+                </section>
+            
+                <!-- Alternativa: Especificar el Nivel en la Transacción -->
+                <section>
+                    <h3>Especificar el Nivel en la Transacción</h3>
+                </section>
+                <section>
+                    <p>Una alternativa más controlada es definir el nivel de aislamiento directamente en la transacción:</p>
+                </section>
+                <section>
+                    <pre><code class="sql">
+BEGIN TRANSACTION ISOLATION LEVEL REPEATABLE READ;
+-- Operaciones SQL
+COMMIT;
+                    </code></pre>
+                </section>
+                <section>
+                    <p>Esto garantiza que solo esa transacción use el nivel de aislamiento deseado, sin afectar las demás.</p>
+                </section>
+            </section>
+            
+            
+
+            <section>
+                <section><h2>Transacciones Anidadas</h2></section>
+            
+                <!-- ¿Qué son las Transacciones Anidadas? -->
+                <section>
+                    <h3>¿Qué son las Transacciones Anidadas?</h3>
+                </section>
+                <section>
+                    <p>Las transacciones anidadas son transacciones que se ejecutan dentro de otra transacción.</p>
+                </section>
+                <section>
+                    <p>En PostgreSQL, no existen transacciones completamente anidadas como en otros sistemas, pero se pueden simular usando <strong>SAVEPOINT</strong>.</p>
+                </section>
+                <section>
+                    <p>Los <strong>SAVEPOINT</strong> permiten crear puntos de control dentro de una transacción, facilitando la reversión parcial sin afectar toda la transacción principal.</p>
+                </section>
+            
+                <!-- ¿Por qué usar Transacciones Anidadas? -->
+                <section>
+                    <h3>¿Por qué usar Transacciones Anidadas?</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Permiten realizar múltiples operaciones relacionadas dentro de una transacción mayor.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Facilitan el manejo de errores en procesos complejos, donde solo algunas partes pueden fallar.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Garantizan la integridad de datos cuando algunas operaciones pueden revertirse sin afectar el resto.</li>
+                    </ul>
+                </section>
+            
+                <!-- Uso de SAVEPOINT -->
+                <section>
+                    <h3>Uso de SAVEPOINT en Transacciones Anidadas</h3>
+                </section>
+                <section>
+                    <p>El comando <code>SAVEPOINT</code> crea un punto de control dentro de la transacción, mientras que <code>ROLLBACK TO</code> permite volver a ese punto sin cancelar toda la transacción.</p>
+                </section>
+                <section>
+                    <p>El comando <code>RELEASE SAVEPOINT</code> elimina el punto de guardado para liberar recursos.</p>
+                </section>
+            
+                <!-- Ejemplo de Transacción Anidada -->
+                <section>
+                    <h3>Ejemplo: Proceso de Facturación</h3>
+                </section>
+                <section>
+                    <p>Supongamos que queremos registrar un pedido con múltiples productos. Si alguno falla, revertimos solo ese registro, pero no todo el pedido.</p>
+                </section>
+                <section>
+                    <pre><code class="sql" style="font-size: 14px;">
+BEGIN;
+
+-- Registrar el pedido principal
+INSERT INTO pedidos (cliente_id, fecha) VALUES (1, NOW());
+
+-- Crear un punto de guardado para el primer producto
+SAVEPOINT producto1;
+INSERT INTO pedido_detalles (pedido_id, producto_id, cantidad) VALUES (1, 101, 5);
+
+-- Si falla el primer producto, revertir solo esa parte
+ROLLBACK TO producto1;
+
+-- Registrar el segundo producto
+SAVEPOINT producto2;
+INSERT INTO pedido_detalles (pedido_id, producto_id, cantidad) VALUES (1, 102, 3);
+
+-- Confirmar los cambios del segundo producto
+RELEASE SAVEPOINT producto2;
+
+-- Finalizar la transacción principal
+COMMIT;
+                    </code></pre>
+                </section>
+                <section>
+                    <p>Si el registro del primer producto falla, solo esa parte se revierte, pero el pedido y otros productos se mantienen.</p>
+                </section>
+            
+                <!-- Ventajas y Desventajas -->
+                <section>
+                    <h3>Ventajas de las Transacciones Anidadas</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Mayor control en operaciones complejas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Permite revertir solo partes específicas sin perder toda la transacción.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Facilita el manejo de errores parciales.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Desventajas y Consideraciones</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Uso excesivo puede hacer el código complejo y difícil de mantener.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>No garantiza que todos los sistemas interpreten el rollback parcial de la misma manera.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Si no se usa correctamente, puede generar inconsistencias si se omite el <code>RELEASE</code>.</li>
+                    </ul>
+                </section>
+            
+                <!-- Buenas Prácticas -->
+                <section>
+                    <h3>Buenas Prácticas</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Definir puntos de guardado solo cuando realmente sean necesarios.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Usar nombres descriptivos para los <code>SAVEPOINT</code> para facilitar el mantenimiento.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Liberar los puntos de guardado que ya no se necesiten con <code>RELEASE SAVEPOINT</code>.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Evitar el uso anidado excesivo, ya que puede llevar a transacciones complejas y propensas a errores.</li>
+                    </ul>
+                </section>
+            </section>
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
