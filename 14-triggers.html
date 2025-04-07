@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Triggers</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <!-- Slide 1: Portada -->
+            <section>
+                <h2>Triggers</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <!-- Slide 2: Introducción a los Triggers -->
+            <section>
+                <section><h2>¿Qué es un Trigger?</h2></section>
+                <section>
+                    <p>Un Trigger es un objeto de la base de datos que se ejecuta automáticamente en respuesta a ciertos eventos en una tabla o vista.</p>
+                </section>
+                <section>
+                    <p>Los eventos pueden incluir operaciones como INSERT, UPDATE, DELETE o TRUNCATE.</p>
+                </section>
+                <section>
+                    <p>Son activados antes o después de la ejecución de la instrucción que los desencadena.</p>
+                </section>
+                <section>
+                    <h3>Ejemplos comunes:</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Actualización automática de registros cuando cambian ciertos valores.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Mantenimiento de auditorías para registrar cambios.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Validación de datos antes de una operación.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Automatización de procesos complejos desencadenados por cambios en la base de datos.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 3: ¿Para qué sirven los Triggers? -->
+            <section>
+                <section><h2>¿Para qué sirven los Triggers?</h2></section>
+                <section>
+                    <p>Los triggers son útiles para automatizar tareas dentro de una base de datos. Algunos de los casos de uso más comunes incluyen:</p>
+                </section>
+                <section>
+                    <ul>
+                        <li>Auditoría de cambios.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Actualización automática de valores.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Validación de datos antes de operaciones.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Mantenimiento de integridad referencial.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Cálculo de campos derivados.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplos:</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li>Registrar actualizaciones en una tabla de auditoría.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Descontar automáticamente el stock al realizar una venta.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Verificar el formato del correo antes de insertar un cliente.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Actualizar el total de un pedido al modificar un detalle.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 4: Tipos de Triggers en PostgreSQL -->
+            <section>
+                <section>
+                    <h2>Tipos de Triggers</h2>
+                </section>
+                <section>
+                    <h3>BEFORE</h3>
+                    <p>Se ejecuta antes de que la operación afecte a la tabla.</p>
+                    <p>Útil para modificar datos antes de que se inserten o actualicen.</p>
+                </section>
+                <section><h3>AFTER</h3>
+                    <p>Se ejecuta después de que la operación ha afectado a la tabla.</p>
+                    <p>Generalmente usado para auditoría o actualizaciones en otras tablas.</p>
+                </section>
+                <section><h3>Eventos específicos</h3>
+                    <ul>
+                        <li>INSERT: Activado al insertar un nuevo registro.</li>
+                        <li>UPDATE: Activado al modificar un registro existente.</li>
+                        <li>DELETE: Activado al eliminar un registro.</li>
+                        <li>TRUNCATE: Activado al vaciar una tabla.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <!-- Slide 5: Estructura de un Trigger -->
+            <section>
+                <section>
+                    <h2>Estructura</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Nombre del Trigger</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Evento que lo activa: INSERT, UPDATE, DELETE, TRUNCATE</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Momento de ejecución: BEFORE, AFTER</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Tabla asociada</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Función que ejecuta el Trigger</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Ejemplo:</h3>
+                    <pre><code class="sql">
+CREATE TRIGGER nombre_trigger
+AFTER INSERT ON empleados
+FOR EACH ROW
+EXECUTE FUNCTION log_update();
+                    </code></pre>
+                </section>
+            </section>
+
+            <!-- EJEMPLOS -->
+            <section>
+                <section>
+                    <h2>Ej 1: Registro de Inserciones</h2>
+                </section>
+                <section>
+                <pre><code class="sql">
+CREATE TRIGGER registrar_insercion
+AFTER INSERT ON empleados
+FOR EACH ROW
+EXECUTE PROCEDURE pg_catalog.log_event();
+                </code></pre>
+                </section>
+                <section>
+                    <p>Este trigger se ejecuta después de insertar un nuevo empleado y utiliza una función del sistema para registrar el evento.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Ej 2: Actualización Automática</h2>
+                </section>
+                <section>
+                <pre><code class="sql">
+CREATE TRIGGER actualizar_stock
+AFTER UPDATE ON productos
+FOR EACH ROW
+WHEN (OLD.cantidad <> NEW.cantidad)
+EXECUTE PROCEDURE pg_catalog.log_update();
+                </code></pre>
+                </section>
+                <section>
+                    <p>El trigger se activa después de actualizar el stock y registra solo si la cantidad ha cambiado.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Ej 3: Auditoría de Borrado</h2>
+                </section>
+                <section>
+                <pre><code class="sql">
+CREATE TRIGGER auditar_borrado
+BEFORE DELETE ON ventas
+FOR EACH ROW
+EXECUTE PROCEDURE pg_catalog.log_delete();
+                </code></pre>
+                </section>
+                <section>
+                    <p>El trigger se activa antes de eliminar un registro en la tabla de ventas y realiza un registro previo a la eliminación.</p>
+                </section>
+            </section>
+
+            <!-- Buenas prácticas -->
+            <section>
+                <section>
+                    <h2>Buenas Prácticas</h2>
+                </section>
+                <section>
+                    <ul>
+                        <li>Evitar lógica compleja dentro de los triggers.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Probar exhaustivamente en entornos de desarrollo.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Documentar el propósito de cada trigger.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Evitar dependencias circulares.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Minimizar el impacto en el rendimiento de la base de datos.</li>
+                    </ul>
+                </section>
+            </section>
+
+        </div>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+    <script>
+        Reveal.initialize();
+    </script>
+</body>
+</html>
