@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Integridad y Seguridad</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <h2>Integridad y Seguridad</h2>
+        <p>Semestre 1, 2025</p>
+      </section>
+
+      <!-- integridad  -->
+      <section>
+        <section>
+          <h2>Integridad</h2>
+        </section>
+        <section>
+            <p><p>La integridad de datos se refiere a la <b>exactitud</b>, <b>consistencia</b> y <b>confiabilidad</b> de los datos durante <b>todo</b> su ciclo de vida.</p></p>
+        </section>
+        <section>
+            <p>Garantiza que los datos no se corrompan y se mantengan válidos según las reglas establecidas por el sistema.</p>
+        </section>
+        <section><h3>Tipos</h3></section>
+        <section>
+            <h4>Integridad de entidad</h4>
+            <p>Cada fila en una tabla debe poder identificarse de forma única (PK).</p>
+        </section>
+        <section>
+            <h4>Integridad referencial</h4>
+            <p>Garantiza que las relaciones entre tablas sean válidas. Ejemplo: una orden no puede referirse a un cliente que no existe.</p>
+        </section>
+        <section>
+            <h4>Integridad de dominio</h4>
+            <p>Cada columna debe contener solo valores del tipo correcto y dentro de un rango o conjunto permitido.</p>
+        </section>
+        <section>
+            <h4>Integridad custom</h4>
+            <p>Reglas específicas del negocio que no están cubiertas por las integridades anteriores. Ejemplo: un descuento no puede ser mayor al 50%.</p>
+        </section>
+        <section><h3>Restricciones SQL</h3></section>
+        <section>
+            <h4>NOT NULL</h4>
+            <p>El campo no puede contener valores nulos</p>
+        </section>
+        <section>
+            <h4>UNIQUE</h4>
+            <p>El campo debe tener valores únicos</p>
+        </section>
+        <section>
+            <h4>PRIMARY KEY</h4>
+            <p>Identificador único y obligatorio</p>
+        </section>
+        <section>
+            <h4>FOREIGN KEY</h4>
+            <p>Clave foránea para mantener relaciones</p>
+        </section>
+        <section>
+            <h4>CHECK</h4>
+            <p>Validación de una condición lógica</p>
+        </section>
+        <section><h3>Reglas de negocio</h3></section>
+        <section>
+            <p>Las restricciones no cubren todos los escenarios.</p>
+        </section>
+        <section>
+            <p>Para lógica más compleja, se usan triggers que ejecutan código automáticamente.</p>
+        </section>
+        <section>
+            <p>Ejemplo:</p>
+            <p>Si un cliente tiene más de 3 pedidos activos, no puede hacer uno nuevo.</p>
+        </section>
+        <section>
+            <p>Esta regla debe implementarse con un trigger porque no es directamente expresable con una restricción CHECK.</p>
+        </section>
+      </section>
+
+
+      <!-- seguridad -->
+    <section>
+        <section><h2>Seguridad</h2></section>
+        <section>
+            <p>La seguridad de datos se refiere a <b>proteger los datos contra accesos no autorizados, modificaciones maliciosas o accidentales y pérdida de información</b>.</p>
+        </section>
+        <section>
+            <p>Abarca muchas áreas que se deben tomar en cuenta</p>
+        </section>
+        <section>
+            <h3>Confidencialidad</h3>
+            <p>Solo los usuarios autorizados pueden acceder a los datos.</p>
+        </section>
+        <section>
+            <h3>Integridad (seguridad)</h3>
+            <p>Solo usuarios autorizados pueden modificar datos.</p>
+        </section>
+        <section>
+            <h3>Disponibilidad</h3>
+            <p>El sistema debe estar accesible cuando se necesite.</p>
+        </section>
+        <section>
+            <h3>Autenticación</h3>
+            <p>Verificación de la identidad del usuario.</p>
+        </section>
+        <section>
+            <h3>Autorización</h3>
+            <p>Control de qué puede hacer el usuario.</p>
+        </section>
+        <section><h3>Autenticación en PostgreSQL</h3></section>
+        <section>
+          <p>PostgreSQL permite distintos métodos de autenticación configurados en el archivo <code>pg_hba.conf</code>.</p>
+        </section>
+        <section>
+            <h4>password</h4>
+            <p>Solicita la contraseña en texto plano.</p>
+        </section>
+        <section>
+            <h4>md5</h4>
+            <p>Solicita la contraseña con hash MD5 (YA NO!!!!)</p>
+        </section>
+        <section>
+            <h4>scram-sha-256</h4>
+            <p>Más seguro, recomendado desde PostgreSQL 10</p>
+        </section>
+        <section>
+            <h4>peer</h4>
+            <p>Verifica que el sistema operativo y el usuario de PostgreSQL coincidan</p>
+        </section>
+        <section>
+          <p><strong>Ubicación típica del archivo <code>pg_hba.conf</code>:</strong></p>
+          <pre><code>/etc/postgresql/15/main/pg_hba.conf</code></pre>
+        </section>
+        <section><h3>Autorización y Roles en PostgreSQL</h3></section>
+        <section>
+            <p>PostgreSQL usa un modelo de <strong>roles</strong>.</p>
+            <p>Un usuario es un rol que puede iniciar sesión.</p>
+        </section>
+        <section>
+            <p>Roles pueden tener permisos sobre:</p>
+            <ul>
+                <li>Tablas</li>
+                <li>Columnas</li>
+                <li>Esquemas</li>
+                <li>Funciones</li>
+            </ul>
+        </section>
+        <section>
+          <pre><code class="sql">
+-- Crear rol
+CREATE ROLE lector;
+
+-- Solo lectura
+GRANT SELECT ON ALL TABLES IN SCHEMA public TO lector;
+
+-- Revocar permiso
+REVOKE INSERT ON productos FROM lector;
+          </code></pre>
+        </section>
+        <section><h2>Buenas Prácticas de Seguridad</h2></section>
+        <section>
+          <ul>
+            <li>Principio del menor privilegio.</li>
+            <li>No usar <code>superuser</code> para tareas normales.</li>
+          </ul>
+        </section>
+        <section>
+            <ul>
+              <li>Usar conexiones cifradas (<code>ssl = on</code>).</li>
+              <li>Registrar accesos con logs y auditoría.</li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li>Cambiar contraseñas regularmente.</li>
+              <li>Probar que los roles no pueden hacer más de lo que deberían.</li>
+            </ul>
+          </section>
+        <section><h3>Mecanismos Adicionales</h3></section>
+        <section>
+          <ul>
+            <li><strong>Encriptación en tránsito:</strong> PostgreSQL soporta SSL/TLS.</li>
+          </ul>
+        </section>
+        <section>
+            <ul>
+              <li><strong>Encriptación en reposo:</strong> Se puede implementar a nivel de sistema operativo.</li>
+            </ul>
+          </section>
+          <section>
+            <ul>
+              <li><strong>pgcrypto:</strong> Extensión para cifrar datos sensibles (como correos o tarjetas).</li>
+            </ul>
+          </section>
+    </section>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>
+    Reveal.initialize();
+  </script>
+</body>
+</html>
