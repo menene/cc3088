@@ -1,0 +1,644 @@
+<!doctype html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+    <title>Dominando la Seguridad en PostgreSQL: Usuarios, Roles y Permisos</title>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.7.0/styles/monokai.min.css" />
+</head>
+<body>
+    <div class="reveal">
+        <div class="slides">
+
+            <section>
+                <h2>Roles</h2>
+                <p>Semestre 1, 2025</p>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Importancia</h2>
+                </section>
+                <section>
+                    <h3>Seguridad de Datos</h3>
+                    <p>Proteger datos sensibles del acceso, modificación o eliminación no autorizados.</p>
+                </section>
+                <section>
+                    <h3>Cumplimiento Normativo</h3>
+                    <p>Cumplir estándares industriales y legales (GDPR, <a href="https://www.cdc.gov/phlp/php/resources/health-insurance-portability-and-accountability-act-of-1996-hipaa.html" target="_blank">HIPAA</a>, SOX, PCI-DSS, etc.)</p>
+                </section>
+                <section>
+                    <h3>Principio de Mínimo Privilegio</h3>
+                    <p>Otorgar solo los permisos <em>mínimos</em> necesarios.</p>
+                </section>
+                <section>
+                    <h3>Integridad Operacional</h3>
+                    <p>Prevenir errores accidentales.</p>
+                    <p>Un usuario sin privilegios <code>DELETE</code> no puede eliminar accidentalmente una tabla crítica.</p>
+                </section>
+                <section>
+                    <h3>Auditabilidad</h3>
+                    <p>Rastrear quién tiene acceso a qué, y quién hizo qué (requiere registro/logging).</p>
+                </section>
+                 <section>
+                    <h3>Potencia y Flexibilidad</h3>
+                    <p>Su Control de Acceso Basado en Roles (RBAC) es robusto pero requiere una configuración cuidadosa.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Todo es un Rol</h2>
+                </section>
+                <section>
+                    <h3>Modelo Unificado</h3>
+                    <p>PostgreSQL no tiene conceptos distintos de 'Usuarios' y 'Grupos'.</p>
+                    <p>Simplemente tiene <strong>Roles</strong>.</p>
+                </section>
+                <section>
+                    <h3>Usuario</h3>
+                    <p>Un Rol + Atributo <code>LOGIN</code></p>
+                    <p><small>Permite al rol establecer una conexión con la base de datos.</small></p>
+                </section>
+                <section>
+                    <h3>Grupo</h3>
+                    <p>Un Rol + Atributo <code>NOLOGIN</code></p>
+                    <p><small>No puede iniciar sesión directamente.</small></p>
+                </section>
+                <section>
+                    <h3>Ventajas</h3>
+                    <ul>
+                        <li>Simplicidad (Solo un conjunto de comandos)</li>
+                        <li>Flexibilidad (Jerarquías con anidación)</li>
+                        <li>Claridad (Capacidades/privilegios)</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Creación y Gestión</h2>
+                </section>
+                <section>
+                    <h3>Crear roles: <code>CREATE ROLE</code></h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        CREATE ROLE <role_name> [ WITH <option> ... ];
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Rol de Login ("Usuario")</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+-- Usuario para una aplicación web (requiere contraseña)
+CREATE ROLE web_app LOGIN PASSWORD 'strong_pwd';
+
+-- Usuario temporal (contraseña expira)
+CREATE ROLE temp_contractor LOGIN PASSWORD 'secret'
+    VALID UNTIL '2024-12-31';
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Rol de Grupo ("Grupo")</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+-- Rol para agrupar permisos de solo lectura
+CREATE ROLE readonly_access NOLOGIN;
+
+-- Rol para desarrolladores (NOLOGIN default)
+CREATE ROLE api_developers;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Atributos</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>LOGIN</code> / <code>NOLOGIN</code>: ¿Puede conectarse?</li>
+                        <li><code>SUPERUSER</code> / <code>NOSUPERUSER</code>: ☠️ Salta todos los chequeos</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>CREATEDB</code> / <code>NOCREATEDB</code>: ¿Puede crear bases de datos?</li>
+                        <li><code>CREATEROLE</code> / <code>NOCREATEROLE</code>: ¿Puede gestionar otros roles?</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>INHERIT</code> / <code>NOINHERIT</code>: ¿Heredar privilegios de grupo automáticamente?</li>
+                        <li><code>REPLICATION</code> / <code>NOREPLICATION</code>: ¿Para replicación por streaming?</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>BYPASSRLS</code> / <code>NOBYPASSRLS</code>: ¿Ignorar Seguridad a Nivel de Fila?</li>
+                        <li><code>PASSWORD 'secret'</code> / <code>PASSWORD NULL</code></li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>VALID UNTIL 'timestamp'</code></li>
+                        <li><code>CONNECTION LIMIT N</code></li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li>Membresía (<code>IN ROLE</code>, <code>ROLE</code>, <code>ADMIN</code>)</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Modificando Roles</h3>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        ALTER ROLE <role_name> [ WITH <option> ... ];
+
+                        -- Ejemplo: Establecer límite de conexión
+                        ALTER ROLE web_app WITH CONNECTION LIMIT 10;
+
+                        -- Ejemplo: Renombrar rol
+                        ALTER ROLE api_devs RENAME TO backend_devs;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Eliminando Roles</h3>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        DROP ROLE <role_name>;
+
+                        -- Ejemplo:
+                        DROP ROLE proveedor;
+                    </code></pre>
+                    <p><strong style="color:orange;">No se pueden eliminar roles que poseen objetos o tienen privilegios.</strong></p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Privilegios</h2>
+                </section>
+                <section>
+                    <h3>Permisos sobre Objetos</h3>
+                    <p>Los privilegios otorgan permiso para realizar acciones específicas sobre objetos específicos de la base de datos.</p>
+                </section>
+                <section>
+                    <h3>Tipos Comunes de Objetos</h3>
+                    <ul>
+                        <li><code>DATABASE</code></li>
+                        <li><code>SCHEMA</code></li>
+                        <li><code>TABLE</code> / <code>VIEW</code></li>
+                        <li><code>FUNCTION</code> / <code>PROCEDURE</code></li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Tipos Comunes de Privilegios</h3>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>SELECT</code>, <code>INSERT</code>, <code>UPDATE</code>, <code>DELETE</code></li>
+                        <li><code>USAGE</code>: Permiso general de acceso.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>EXECUTE</code>: Llamar funciones.</li>
+                        <li><code>CREATE</code>: Crear objetos.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>CONNECT</code>: Conectarse a una base de datos.</li>
+                        <li><code>ALL PRIVILEGES</code>: Otorga todos los privilegios.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                     <h2>Asignando Privilegios</h2>
+                </section>
+                <section>
+                    <h3>Sintaxis</h3>
+                     <pre><code class="language-sql" data-trim data-noescape>
+                        GRANT <privilege|ALL> [, ...]
+                           ON [<object_type>] <object_name> [, ...]
+                           TO <role_name|PUBLIC> [, ...]
+                           [ WITH GRANT OPTION ];
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Permisos de Tabla</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+-- Otorgar SELECT en una tabla a un rol de grupo
+GRANT SELECT ON TABLE public.products TO usr;
+
+-- Otorgar DML en otra tabla a un rol de usuario
+GRANT SELECT, INSERT ON TABLE public.orders TO web_app;
+
+-- Otorgar SELECT en TODAS las tablas en un esquema
+GRANT SELECT ON ALL TABLES IN SCHEMA reporting TO usr;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Permisos de Esquema</h3>
+                     <pre><code class="language-sql" data-trim data-noescape>
+-- Permitir al rol VER y USAR objetos en el esquema 'api'
+GRANT USAGE ON SCHEMA api TO backend_developers;
+
+-- Permitir al rol CREAR objetos dentro del esquema 'api'
+GRANT CREATE ON SCHEMA api TO backend_developers;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>El Rol <code>PUBLIC</code></h3>
+                    <p>Un pseudo-rol especial que representa a <em>todos</em> los roles actuales y futuros.</p>
+                    <p><strong style="color:red;">Otorgar a <code>PUBLIC</code> raramente es buena idea.</strong></p>
+                </section>
+                <section>
+                    <h3><code>WITH GRANT OPTION</code></h3>
+                    <p>Permite al rol receptor otorgar los <em>mismos</em> privilegios a otros roles.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Revocando Privilegios</h2>
+                </section>
+                <section>
+                    <h3>Sintaxis</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        REVOKE [GRANT OPTION FOR]
+                                <privilege|ALL> [, ...]
+                                ON [<object_type>] <object_name> [, ...]
+                                FROM <role_name|PUBLIC> [, ...]
+                                [ CASCADE | RESTRICT ];
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Tabla y Esquema</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Eliminar capacidad DELETE de web_app en orders
+                        REVOKE DELETE ON TABLE public.orders FROM web_app;
+
+                        -- Impedir a los devs crear nuevos objetos en 'api'
+                        REVOKE CREATE ON SCHEMA api FROM backend_devs;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Opciones</h3>
+                    <ul>
+                        <li><code>GRANT OPTION FOR</code>: Revoca solo la opción de otorgar, no el privilegio en sí.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>CASCADE</code>: También revoca privilegios dependientes.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>RESTRICT</code>: (Default) Falla si existen dependencias.</li>
+                    </ul>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Membresía de Roles y Herencia</h2>
+                </section>
+                <section>
+                    <h3>Membresía de Roles</h3>
+                    <p>Los roles pueden ser miembros de otros roles ("grupos").</p>
+                </section>
+                <section>
+                    <h3>Ejemplo de Membresía</h3>
+                    <ol>
+                        <li>Crear roles "grupo" (<code>NOLOGIN</code>).</li>
+                        <li><code>GRANT</code> privilegios de objeto A los roles de grupo.</li>
+                        <li>Crear roles "usuario" (<code>LOGIN</code>).</li>
+                        <li><code>GRANT</code> membresía de grupo A los roles de usuario.</li>
+                    </ol>
+                </section>
+                <section>
+                    <h3>Ejemplo de Membresía</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- 1. Grupos
+
+                        CREATE ROLE data_readers NOLOGIN;
+                        CREATE ROLE report_generators NOLOGIN;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo de Membresía</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- 2. Privilegios A Grupos
+
+                        GRANT USAGE ON SCHEMA reporting 
+                            TO data_readers, report_generators;
+
+                        GRANT SELECT ON ALL TABLES IN SCHEMA reporting 
+                            TO data_readers;
+                        
+                        GRANT EXECUTE 
+                            ON FUNCTION reporting.generate_monthly_report(date)
+                            TO report_generators;
+                    </code></pre>
+                </section>
+
+
+                <section>
+                    <h3>Ejemplo de Membresía</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- 3. Usuarios
+
+                        CREATE ROLE alice LOGIN PASSWORD '...';
+                        CREATE ROLE bob LOGIN PASSWORD '...';
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo de Membresía</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- 4. Membresía A Usuarios
+
+                        -- Alice hereda lectura
+                        GRANT data_readers TO alice;
+
+                        -- Bob hereda ambos
+                        GRANT data_readers, report_generators TO bob;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Beneficios</h3>
+                     <ul>
+                        <li>Gestión Simplificada.</li>
+                        <li>Claridad y Auditabilidad.</li>
+                        <li>Consistencia.</li>
+                     </ul>
+                </section>
+                <section>
+                    <h3>Herencia</h3>
+                    <p>Controla si los privilegios de membresía son automáticos.</p>
+                </section>
+                 <section>
+                    <h3><code>INHERIT</code> (Predeterminado)</h3>
+                    <p>El rol gana <em>automáticamente</em> privilegios de todos los grupos miembros al iniciar sesión.</p>
+                </section>
+                <section>
+                    <h3><code>NOINHERIT</code></h3>
+                    <p>El rol <em>no</em> gana automáticamente privilegios de grupo.</p>
+                    <p>Debe activarse.</p>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        ALTER ROLE alice NOINHERIT;
+
+                        -- En la sesión de Alice:
+                        -- SELECT ... FROM reporting.some_table; --> FALLA
+                        SET ROLE data_readers;
+
+                        -- SELECT ... FROM reporting.some_table; --> OK
+                        RESET ROLE;
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>DEFAULT PRIVILEGES</h2>
+                </section>
+                <section>
+                    <h3>Problema</h3>
+                    <p><code>GRANT</code> solo se aplica a objetos que <strong>ya existen</strong>.</p>
+                    <p>¿Qué pasa con objetos creados después por migraciones o aplicaciones?</p>
+                </section>
+                <section>
+                    <h3>La Solución</h3>
+                    <p><code>DEFAULT PRIVILEGES</code></p>
+                    <p><small>Establece permisos predeterminados para objetos <em>futuros</em> creados por un rol específico, o en un esquema específico.</small></p>
+                </section>
+                 <section>
+                    <h3>Sintaxis</h3>
+                     <pre><code class="language-sql" data-trim data-noescape>
+                        ALTER DEFAULT PRIVILEGES
+                            [ FOR ROLE <creator_role> ] -- Objetos creados POR este rol
+                            [ IN SCHEMA <schema_name> ] -- Objetos creados EN este esquema
+                            GRANT <privileges> ON <object_type> -- El grant predeterminado
+                            TO <target_role>; -- El receptor
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Asegurar que readonly_access 
+                        -- pueda leer tablas futuras creadas
+                        -- POR app_migration_role EN SCHEMA public:
+
+                        ALTER DEFAULT PRIVILEGES
+                            FOR ROLE app_migration_role
+                            IN SCHEMA public
+                            GRANT SELECT ON TABLES
+                            TO readonly_access;
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Importancia</h3>
+                    <p><strong>Crucial</strong> para esquemas de aplicación gestionados por migraciones o pipelines CI/CD.</p>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Roles Predefinidos</h2>
+                    <p><small>(PostgreSQL 14+)</small></p>
+                </section>
+                <section>
+                    <h3>Concepto</h3>
+                    <p>Roles existentes que simplifican otorgar permisos para tareas comunes administrativas y de monitoreo.</p>
+                </section>
+                <section>
+                    <h3>Ejemplos</h3>
+                    <ul>
+                        <li><code>pg_read_all_data</code>: <code>SELECT</code> en todas las tablas/vistas/secuencias.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>pg_write_all_data</code>: <code>INSERT/UPDATE/DELETE</code> en todas las tablas/vistas.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>pg_monitor</code>: Acceso a varias vistas/funciones estadísticas para monitoreo.</li>
+                    </ul>
+                </section>
+                <section>
+                    <ul>
+                        <li><code>pg_signal_backend</code>: Permitir cancelar/terminar otros backends.</li>
+                    </ul>
+                </section>
+                <section>
+                    <h3>Uso</h3>
+                    <p>Otorgar membresía como cualquier otro rol de grupo:</p>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        CREATE ROLE monitoring_tool LOGIN PASSWORD '...';
+                        GRANT pg_monitor TO monitoring_tool;
+
+                        CREATE ROLE data_analyst LOGIN PASSWORD '...';
+                        GRANT pg_read_all_data TO data_analyst;
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Seguridad a Nivel de Fila (RLS)</h2>
+                </section>
+                <section>
+                    <p>Controlar el acceso a <strong>filas</strong> específicas dentro de una tabla basado en políticas y contexto.</p>
+                </section>
+                <section>
+                    <p>Apps multi-tenant, usuarios viendo solo sus propios datos.</p>
+                </section>
+                <section>
+                    <h3>Cómo Funciona</h3>
+                </section>
+                <section>
+                    <h4>Paso 1 - Habilitar</h4>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        ALTER TABLE <table_name> ENABLE ROW LEVEL SECURITY;
+
+                        -- Recomendado: Aplicar RLS incluso 
+                        -- al propietario de la tabla
+                        ALTER TABLE <table_name> FORCE ROW LEVEL SECURITY;
+                    </code></pre>
+                </section>
+                 <section>
+                    <h4>Paso 2 - Definir Políticas</h4>
+                     <pre><code class="language-sql" data-trim data-noescape>
+                        CREATE POLICY <policy_name> ON <table_name>
+                            -- Permissive es default
+                            [ AS {PERMISSIVE | RESTRICTIVE} ]
+                            -- SELECT, INSERT, UPDATE, DELETE, ALL
+                            [ FOR <command> ]
+                            [ TO <role> ] -- Default PUBLIC
+                            USING ( <boolean_expression_for_reads> )
+                            [ WITH CHECK ( <boolean_expression_for_writes> ) ];
+                    </code></pre>
+                </section>
+                <section>
+                    <h3>Ejemplo: Usuario ve/modifica sus propios docs</h3>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Asumir tabla 'documents' tiene columna 'owner_username'
+                        ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+                        ALTER TABLE documents FORCE ROW LEVEL SECURITY;
+
+                        -- Política para SELECT (usando USING)
+                        CREATE POLICY select_own_docs ON documents FOR SELECT
+                          USING ( owner_username = current_user );
+
+                        -- Política para INSERT (usando WITH CHECK)
+                        CREATE POLICY insert_own_docs ON documents FOR INSERT
+                          WITH CHECK ( owner_username = current_user );
+
+                        -- Política para UPDATE (usando AMBAS)
+                        CREATE POLICY update_own_docs ON documents FOR UPDATE
+                          USING ( owner_username = current_user ) -- Solo puede afectar docs propios
+                          WITH CHECK ( owner_username = current_user ); -- No puede cambiar propietario
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Asumir tabla 'documents' tiene columna 'owner_username'
+                        ALTER TABLE documents ENABLE ROW LEVEL SECURITY;
+                        ALTER TABLE documents FORCE ROW LEVEL SECURITY;
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Política para SELECT (usando USING)
+                        CREATE POLICY select_own_docs ON documents FOR SELECT
+                          USING ( owner_username = current_user );
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Política para INSERT (usando WITH CHECK)
+                        CREATE POLICY insert_own_docs ON documents FOR INSERT
+                          WITH CHECK ( owner_username = current_user );
+                    </code></pre>
+                </section>
+                <section>
+                    <pre><code class="language-sql" data-trim data-noescape>
+                        -- Política para UPDATE (usando AMBAS)
+                        CREATE POLICY update_own_docs ON documents FOR UPDATE
+                            -- Solo puede afectar docs propios
+                            USING ( owner_username = current_user )
+                            -- No puede cambiar propietario
+                            WITH CHECK ( owner_username = current_user );
+                    </code></pre>
+                </section>
+            </section>
+
+            <section>
+                <section>
+                    <h2>Mejores Prácticas de Seguridad</h2>
+                </section>
+                <section>
+                    <p><strong>Principio de Mínimo Privilegio</strong></p>
+                    <p><small>Otorgar <em>solo</em> los permisos necesarios. Empezar mínimo.</small></p>
+                </section>
+                <section>
+                    <p><strong>Evitar Roles <code>SUPERUSER</code></strong></p>
+                    <p><small>Usar roles de admin dedicados. Las Apps NUNCA se ejecutan como superuser.</small></p>
+                </section>
+                <section>
+                    <p><strong>Usar Roles de Grupo</strong></p>
+                    <p><small>Gestionar permisos vía grupos (`NOLOGIN`). Añadir/eliminar usuarios (`LOGIN`) de grupos.</small></p>
+                </section>
+                 <section>
+                    <p><strong>Contraseñas Fuertes y Autenticación</strong></p>
+                     <p><small>Usar SCRAM-SHA-256, Certs, LDAP/Kerberos. Asegurar <code>pg_hba.conf</code>.</small></p>
+                </section>
+                 <section>
+                    <p><strong>Usar <code>DEFAULT PRIVILEGES</code></strong></p>
+                     <p><small>Gestionar permisos de objetos futuros en esquemas de aplicación.</small></p>
+                </section>
+                <section>
+                    <p><strong>Seguridad a Nivel de Fila (RLS)</strong></p>
+                    <p><small>Implementar para control de acceso fino a nivel de fila donde sea necesario.</small></p>
+                </section>
+                <section>
+                    <p><strong>Auditorías Regulares</strong></p>
+                    <p><small>Revisar periódicamente roles, membresías, privilegios. ¿Quién necesita qué?</small></p>
+                </section>
+                 <section>
+                    <p><strong>Separación de Funciones (responsabilidades)</strong></p>
+                    <p><small>Usar roles distintos para apps, reportes, apis, administración, migraciones.</small></p>
+                 </section>
+                 <section>
+                    <p><strong>Forzar SSL/TLS</strong></p>
+                    <p><small>Usar <code>hostssl</code> en <code>pg_hba.conf</code>. Proteger datos en tránsito.</small></p>
+                 </section>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- Using CDN links as provided in the user's example -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/reveal.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.5.0/plugin/highlight/highlight.min.js"></script>
+
+    <script>
+        Reveal.initialize({
+            plugins: [ RevealHighlight ],
+        });
+    </script>
+</body>
+</html>
+
+
+5010-7751
+Giovanni Masariegos
