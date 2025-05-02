@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>CASE & COALESCE</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section>
+        <h2>CASE & COALESCE</h2>
+        <p>Semestre 1, 2025</p>
+    </section>
+
+      <section>
+        <section><h2>Definición</h2></section>
+        <section>
+          <p>Muchas veces es necesario aplicar lógica condicional o transformar datos antes de mostrarlos.</p>
+        </section>
+        <section>
+            <p>Estas herramientas son esenciales para:</p>
+            <ul>
+                <li>Reemplazar valores nulos</li>
+                <li>Clasificar información</li>
+                <li>Formatear resultados</li>
+                <li>Agrupar y resumir datos</li>
+            </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>CASE</h2></section>
+        <section>
+          <h3>Estructura</h3>
+          <pre><code>CASE columna
+  WHEN valor1 THEN resultado1
+  WHEN valor2 THEN resultado2
+  ELSE resultado_por_defecto
+END</code></pre>
+        </section>
+        <section><p>Se puede usar en SELECT, WHERE, ORDER BY o en funciones.</p></section>
+        <section><h3>Ejemplos</h3></section>
+        <section>
+          <pre><code>SELECT nombre, 
+  CASE 
+    WHEN edad < 18 THEN 'Menor de edad'
+    WHEN edad < 65 THEN 'Adulto'
+    ELSE 'Tercera edad'
+  END AS grupo_etario
+FROM personas;</code></pre>
+        </section>
+        <section>
+        <pre><code>SELECT producto, precio,
+CASE 
+  WHEN precio < 50 THEN 'Bajo'
+  WHEN precio BETWEEN 50 AND 100 THEN 
+    CASE 
+      WHEN descuento > 0 THEN 'Medio con descuento'
+      ELSE 'Medio'
+    END
+  ELSE 'Alto'
+END AS categoria
+FROM productos;</code></pre>
+        </section>
+        <section>
+        <pre><code>SELECT 
+CASE 
+  WHEN EXTRACT(MONTH FROM fecha) IN (11, 12) THEN 'Fin de año'
+  ELSE 'Resto del año'
+END AS temporada,
+SUM(total) 
+FROM ventas
+GROUP BY temporada;</code></pre>
+      </section>
+    </section>
+        
+
+      <section>
+        <section><h2>COALESCE()</h2></section>
+        <section>
+          <p>Devuelve el primer valor no nulo de una lista.</p>
+          <pre><code>COALESCE(valor1, valor2, valor3, ...)</code></pre>
+        </section>
+        <section>
+          <p>Útil para:</p>
+          <ul>
+            <li>Asegurar un valor por defecto</li>
+            <li>Reemplazar nulos</li>
+            <li>Establecer jerarquías de prioridad</li>
+          </ul>
+        </section>
+        <section><h3>Ejemplos</h3></section>
+        <section>
+          <h3>Valor por defecto</h3>
+          <pre><code>
+SELECT 
+nombre, 
+COALESCE(telefono, 'No disponible') AS telefono
+FROM clientes;</code></pre>
+        </section>
+        <section>
+            <pre><code>
+SELECT 
+nombre, 
+COALESCE(email_personal, email_empresa, 'Sin correo') AS mail
+FROM empleados;</code></pre>
+      </section>
+      <section>
+        <pre><code>
+SELECT 
+nombre, 
+total, 
+COALESCE(descuento, 0) AS descuento,
+total - COALESCE(descuento, 0) AS total_final
+FROM pedidos;</code></pre>
+      </section>
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>Reveal.initialize();</script>
+</body>
+</html>
