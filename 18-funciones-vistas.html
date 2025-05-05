@@ -1,0 +1,228 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <title>Funciones, Stored Procedures y Vistas</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <!-- Portada -->
+      <section>
+        <h1>Funciones, Stored Procedures y Vistas</h1>
+        <p>Semestre 1, 2025</p>
+      </section>
+
+      <!-- Funciones -->
+      <section>
+        <section><h2>Funciones</h2></section>
+        <section>
+          <p>Una función es una rutina que encapsula un conjunto de operaciones que pueden ser reutilizadas.</p>
+        </section>
+        <section>
+            <h3>Usos</h3>
+            <ul>
+              <li>Reutilización de lógica</li>
+              <li>Mejor mantenimiento del código SQL</li>
+              <li>Separación de responsabilidades</li>
+              <li>Uso en triggers, consultas y vistas</li>
+            </ul>
+          </section>
+        <section>
+            <h3>Sintaxis</h3>
+            <pre><code class="sql">
+CREATE [OR REPLACE] FUNCTION nombre_funcion(parámetros)
+RETURNS tipo_retorno AS $$
+BEGIN
+  -- cuerpo de la función
+END;
+$$ LANGUAGE plpgsql;
+          </code></pre>
+        </section>
+        <section>
+          <ul>
+            <li><code>CREATE FUNCTION</code>: declaración inicial</li>
+            <li><code>RETURNS</code>: tipo de retorno (escalar o conjunto)</li>
+            <li><code>$$</code>: delimitador del cuerpo</li>
+            <li><code>LANGUAGE</code>: lenguaje usado (usualmente plpgsql)</li>
+          </ul>
+        </section>
+        <section>
+            <h3>Tipos de retorno</h3>
+            <ul>
+              <li><strong>Escalar:</strong> integer, text, boolean, etc.</li>
+              <li><strong>Registro:</strong> estructura personalizada</li>
+              <li><strong>Table:</strong> tabla completa, útil para vistas complejas</li>
+            </ul>
+          </section>
+          <section><h3>Ejemplo 1</h3></section>
+          <section>
+            <pre><code class="sql">
+CREATE FUNCTION cuadrado(numero INTEGER)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN numero * numero;
+END;
+$$ LANGUAGE plpgsql;
+    </code></pre>
+    <p>Uso:</p>
+    <pre><code class="sql">
+SELECT cuadrado(5); -- Devuelve 25
+                    </code></pre>
+          </section>
+          <section><h3>Ejemplo 2</h3></section>
+          <section>
+            <pre><code class="sql">
+CREATE FUNCTION productos_bajo_stock()
+RETURNS TABLE(id INT, nombre TEXT, stock INT) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT id, nombre, stock FROM productos WHERE stock < 10;
+END;
+$$ LANGUAGE plpgsql;
+    </code></pre>
+    <p>Uso:</p>
+    <pre><code class="sql">
+SELECT * FROM productos_bajo_stock();
+    </code></pre>
+          </section>
+      </section>
+
+      <!-- Stored Procedures -->
+      <section>
+        <section><h2>Stored Procedures</h2></section>
+        <section><p>Un <strong>stored procedure</strong> (procedimiento almacenado) es un conjunto de instrucciones SQL que se almacena en la base de datos y se puede ejecutar de forma explícita.</p></section>
+
+        <section>
+          <h3>Diferencias con las Funciones</h3>
+        </section>
+
+        <section>
+            <ul>
+                <li>Las funciones deben devolver un valor, las procedures no.</li>
+                <li>Las procedures se ejecutan con <code>CALL</code>, las funciones con <code>SELECT</code> o como parte de expresiones.</li>
+                <li>Las procedures permiten controlar transacciones con <code>COMMIT</code> y <code>ROLLBACK</code> dentro del cuerpo.</li>
+            </ul>
+        </section>
+      
+        <section>
+          <h3>Sintaxis Básica</h3>
+          <pre><code class="sql">
+CREATE PROCEDURE actualizar_precio(
+    IN producto_id INT,
+    IN nuevo_precio NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+UPDATE productos
+SET precio = nuevo_precio
+WHERE id = producto_id;
+END;
+$$;
+          </code></pre>
+        </section>
+      
+        <section>
+          <h3>Ejecutar una Procedure</h3>
+          <pre><code class="sql">
+      CALL actualizar_precio(5, 49.99);
+          </code></pre>
+        </section>
+      
+        <section>
+            <h3>Uso de Transacciones</h3>
+            <p>Los stored procedures pueden gestionar transacciones internas, lo cual no es posible en funciones.</p>
+        </section>
+        <section>
+    <pre><code class="sql">
+CREATE PROCEDURE transferir_saldo(
+    IN origen INT,
+    IN destino INT,
+    IN monto NUMERIC
+)
+LANGUAGE plpgsql
+AS $$
+BEGIN
+START TRANSACTION;
+UPDATE cuentas SET saldo = saldo - monto WHERE id = origen;
+UPDATE cuentas SET saldo = saldo + monto WHERE id = destino;
+COMMIT;
+END;
+$$;
+    </code></pre>
+    </section>
+        
+      
+        <section>
+          <h3>Consideraciones</h3>
+          <ul>
+            <li>Útiles para operaciones complejas que involucran múltiples pasos.</li>
+            <li>Permiten mantener lógica del negocio en el servidor.</li>
+            <li>Pueden dificultar la portabilidad a otros DBMS.</li>
+          </ul>
+        </section>
+      </section>
+    
+      <!-- Vistas -->
+      <section>
+        <section><h2>Vistas</h2></section>
+        <section><p>Una vista es una representación virtual de una consulta. No almacena datos físicamente; se consulta cada vez que se accede a ella.</p></section>
+        <section>
+            <h3>Ventajas de usar vistas</h3>
+            <ul>
+              <li>Ocultan la complejidad</li>
+              <li>Mejoran la seguridad</li>
+              <li>Reutilización de consultas</li>
+              <li>Base para reportes o funciones</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Sintaxis</h3>
+            <pre><code class="sql">
+CREATE VIEW nombre_vista AS
+SELECT columna1, columna2
+FROM tabla
+WHERE condición;
+            </code></pre>
+          </section>
+          <section><h3>Ejemplo 1</h3></section>
+        <section>
+            <pre><code class="sql">
+CREATE VIEW resumen_ventas AS
+SELECT o.id, c.nombre, o.total, o.fecha
+FROM ordenes o
+JOIN clientes c ON o.cliente_id = c.id;
+    </code></pre>
+    <p>Uso:</p>
+    <pre><code class="sql">
+SELECT * FROM resumen_ventas;
+                    </code></pre>
+        </section>
+        <section><h3>Ejemplo 2</h3></section>
+        <section>
+            <pre><code class="sql">
+CREATE VIEW total_por_cliente AS
+SELECT c.id, c.nombre, SUM(o.total) AS total
+FROM clientes c
+JOIN ordenes o ON c.id = o.cliente_id
+GROUP BY c.id;
+    </code></pre>
+    <p>Uso:</p>
+    <pre><code class="sql">
+SELECT * FROM total_por_cliente ORDER BY total DESC;
+    </code></pre>
+        </section>
+      </section>
+      
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>Reveal.initialize();</script>
+</body>
+</html>
