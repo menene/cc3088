@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="es">
+   <head>
+      <meta charset="utf-8">
+      <title>Tipos de Datos Personalizados</title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css">
+      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css">
+   </head>
+   <body>
+      <div class="reveal">
+         <div class="slides">
+            <section>
+               <h1>Tipos de Datos Personalizados</h1>
+               <p>Semestre 1, 2025</p>
+            </section>
+
+            <!-- into -->
+            <section>
+               <section>
+                  <h2>Usos</h2>
+               </section>
+               <section>
+                  <ul>
+                     <li>Crear estructuras más legibles y seguras.</li>
+                     <li>Encapsulan reglas, validaciones y agrupaciones lógicas.</li>
+                  </ul>
+               </section>
+            </section>
+
+            <!-- composite -->
+            <section>
+               <section>
+                    <h2>Tipos Compuestos</h2>
+                    <p>Composite</p>
+               </section>
+               <section>
+                    <p>Permiten agrupar múltiples atributos como un solo valor.</p>
+               </section>
+               <section>
+                  <pre>
+    <code>
+CREATE TYPE direccion AS (
+  calle TEXT,
+  ciudad TEXT,
+  codigo_postal TEXT
+);</code></pre>
+               </section>
+               <section>
+                  <h3>Ejemplo</h3>
+               </section>
+               <section>
+                  <pre><code>
+CREATE TYPE direccion AS (
+    calle TEXT,
+    ciudad TEXT,
+    codigo_postal TEXT
+);
+
+CREATE TABLE clientes (
+    id SERIAL PRIMARY KEY,
+    nombre TEXT,
+    direccion direccion
+);</code></pre>
+               </section>
+               <section>
+                  <pre><code>SELECT nombre, direccion.ciudad
+FROM clientes;</code></pre>
+               </section>
+            </section>
+
+            <!-- enum -->
+            <section>
+               <section>
+                    <h2>ENUM</h2>
+               </section>
+               <section>
+                    <p>Útiles para estados limitados y ordenados.</p>
+               </section>
+               <section>
+                  <pre><code>CREATE TYPE estado_pedido AS ENUM (
+  'pendiente',
+  'procesando',
+  'enviado',
+  'entregado',
+  'cancelado'
+);</code></pre>
+               </section>
+               <section>
+                  <h2>Ejemplo</h2>
+               </section>
+               <section>
+                  <pre><code>
+CREATE TYPE estado_pedido 
+    AS ENUM ('pendiente', 'enviado', 'entregado');
+
+CREATE TABLE pedidos (
+  id SERIAL PRIMARY KEY,
+  producto TEXT,
+  estado estado_pedido
+);</code></pre>
+               </section>
+               <section>
+                  <pre><code>
+SELECT * FROM pedidos WHERE estado = 'pendiente';
+SELECT * FROM pedidos ORDER BY estado;</code></pre>
+               </section>
+               <section>
+                  <h3>Funciones</h3>
+               </section>
+               <section>
+                  <pre><code>
+CREATE FUNCTION filtrar_por_estado(est estado_pedido)
+RETURNS SETOF pedidos AS $$
+BEGIN
+  RETURN QUERY SELECT * FROM pedidos WHERE estado = est;
+END;
+$$ LANGUAGE plpgsql;</code></pre>
+               </section>
+            </section>
+            
+            <!-- domain -->
+            <section>
+               <section>
+                  <h2>Dominio</h2>
+                  <p>Domain</p>
+               </section>
+               <section>
+                  <ul>
+                     <li>Basados en tipos existentes</li>
+                     <li>Incluyen restricciones reutilizables</li>
+                  </ul>
+               </section>
+               <section>
+                  <pre><code>CREATE DOMAIN correo_valido AS TEXT
+CHECK 
+(VALUE ~* '^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$');</code></pre>
+               </section>
+               <section>
+                  <h3>Ejemplo</h3>
+               </section>
+               <section>
+                  <pre><code>CREATE DOMAIN edad_positiva AS INT CHECK (VALUE > 0);
+
+CREATE TABLE empleados (
+  id SERIAL PRIMARY KEY,
+  nombre TEXT,
+  edad edad_positiva
+);</code></pre>
+               </section>
+               <section>
+                  <pre><code>
+INSERT INTO empleados(nombre, edad)
+VALUES ('Carlos', -5); -- ERROR</code></pre>
+               </section>
+            </section>
+
+            <!-- comparacion -->
+            <section>
+                <section>
+                    <h2>Comparación entre tipos personalizados</h2>
+                </section>
+                <section>
+                    <table style="font-size: 24px;">
+                        <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Descripción</th>
+                            <th>Validación</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr>
+                            <td><code>COMPOSITE</code></td>
+                            <td>Agrupa múltiples campos en una sola estructura</td>
+                            <td>❌</td>
+                        </tr>
+                        <tr>
+                            <td><code>ENUM</code></td>
+                            <td>Valores predefinidos, controlados y ordenables</td>
+                            <td>✅</td>
+                        </tr>
+                        <tr>
+                            <td><code>DOMAIN</code></td>
+                            <td>Tipo base con reglas adicionales reutilizables</td>
+                            <td>✅</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </section>
+            </section>
+
+            <!-- postgis -->
+             <section>
+                <section><h2>Datos Geoespaciales</h2></section>
+
+                <section>
+                    <p><strong>PostGIS</strong></p>
+                    <ul>
+                        <li>Extensión de PostgreSQL que añade soporte para tipos de datos espaciales.</li>
+                        <li>Permite almacenar, consultar y analizar datos geográficos.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Tipos de Datos</h3>
+                    <ul>
+                        <li><code>GEOMETRY</code>: Coordenadas planas (2D, 3D)</li>
+                        <li><code>GEOGRAPHY</code>: Coordenadas geográficas (lat/lon sobre la Tierra)</li>
+                        <li><code>POINT</code>, <code>LINESTRING</code>, <code>POLYGON</code>, <code>MULTIPOLYGON</code>, etc.</li>
+                    </ul>
+                </section>
+
+                <section>
+                    <h3>Activar PostGIS</h3>
+                    <pre><code class="sql">
+CREATE EXTENSION postgis;
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Ejemplo</h3>
+                    <pre><code class="sql">
+CREATE TABLE lugares (
+    id SERIAL PRIMARY KEY,
+    nombre TEXT,
+    ubicacion GEOGRAPHY(POINT, 4326)
+);
+                    </code></pre>
+                    <p><code>4326</code> es el SRID para coordenadas WGS 84 (latitud/longitud).</p>
+                </section>
+
+                <section>
+                    <h3>Insertar datos con ubicación</h3>
+                    <pre><code class="sql">
+INSERT INTO lugares (nombre, ubicacion)
+VALUES (
+    'Catedral de Guatemala',
+    ST_GeogFromText('SRID=4326;POINT(-90.5133 14.6349)')
+);
+                    </code></pre>
+                </section>
+
+                <section>
+                    <h3>Buscar lugares cerca de un punto</h3>
+                    <pre><code class="sql">
+SELECT nombre
+FROM lugares
+WHERE ST_DWithin(
+    ubicacion,
+    ST_GeogFromText('SRID=4326;POINT(-90.51 14.63)'),
+    1000  -- metros
+);
+                    </code></pre>
+                    <p>Encuentra lugares a menos de 1 km de un punto dado.</p>
+                </section>
+
+                <section>
+                    <h3>Calcular distancia entre puntos</h3>
+                    <pre><code class="sql">
+SELECT
+l1.nombre AS origen,
+l2.nombre AS destino,
+ST_Distance(l1.ubicacion, l2.ubicacion) AS distancia_m
+FROM lugares l1, lugares l2
+WHERE l1.id &lt;&gt; l2.id;
+                    </code></pre>
+                </section>
+            </section>
+         </div>
+      </div>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+      <script>Reveal.initialize();</script>
+   </body>
+</html>
