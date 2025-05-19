@@ -1,0 +1,183 @@
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <title>ORM</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/theme/black.min.css" />
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+      <section><h1>ORM</h1><p>Semestre 1, 2025</p></section>
+
+      <section>
+        <section><h2>Definición</h2></section>
+        <section><p>Object-Relational Mapping</p></section>
+        <section>
+          <p>Técnica que permite interactuar con una base de datos relacional utilizando <b>objetos</b> en el lenguaje de programación.</p>
+        </section>
+        <section>
+            <p>Permite trabajar con clases en lugar de SQL directamente.</p>
+        </section>
+        <section>
+          <p>Intenta cerrar la brecha entre programación orientada a objetos y bases de datos relacionales.</p>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Usos</h2></section>
+        <section>
+          <ul>
+            <li>Evita SQL embebido y difícil de mantener</li>
+            <li>Permite trabajar con objetos directamente</li>
+            <li>Mejor organización y reutilización de lógica</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Terminología</h2></section>
+        <section>
+          <ul>
+            <li>Clase = Tabla</li>
+            <li>Atributo = Columna</li>
+            <li>Instancia = Fila</li>
+            <li>Métodos: create, read, update, delete</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Relación entre modelos y tablas</h2></section>
+        <section>
+          <ul>
+            <li>User → users</li>
+            <li>first_name → first_name</li>
+            <li>Relaciones:
+              <ul>
+                <li>hasOne / belongsTo</li>
+                <li>hasMany</li>
+                <li>belongsToMany</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Ventajas</h2></section>
+        <section>
+          <ul>
+            <li>Abstracción del SQL</li>
+            <li>Protección contra inyecciones</li>
+            <li>Reutilización y validación de modelos</li>
+            <li>Fácil mantenimiento y migración</li>
+            <li>Agnostico al DBMS (no siempre)</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Desventajas</h2></section>
+        <section>
+          <ul>
+            <li>Posible bajo rendimiento</li>
+            <li>Consultas complejas no optimizadas</li>
+            <li>Capa adicional de abstracción</li>
+            <li>Dependencia del ORM sin conocer SQL</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>Ciclo de vida (Eloquent)</h2></section>
+        <section><pre><code class="php">
+$user = new User;
+$user->name = 'Ana';
+$user->save();
+
+$user = User::find(1);
+$user->name = 'Ana López';
+$user->save();
+
+$user->delete();
+        </code></pre></section>
+      </section>
+
+      <section>
+        <section><h2>Ejemplo básico (Eloquent)</h2></section>
+        <section><pre><code class="php">
+// Modelo
+class User extends Model {
+  protected $fillable = ['name', 'email'];
+}
+
+// Crear usuario
+User::create([
+  'name' => 'Pedro',
+  'email' => 'pedro@example.com'
+]);
+
+// Consultar
+$users = User::where('name', 'Pedro')->get();
+        </code></pre></section>
+      </section>
+
+      <section>
+        <section><h2>Relaciones (Eloquent)</h2></section>
+        <section><pre><code class="php">
+// User
+public function posts() {
+  return $this->hasMany(Post::class);
+}
+
+// Post
+public function user() {
+  return $this->belongsTo(User::class);
+}
+
+// Consulta
+$user = User::where('name', 'Carlos')->first();
+foreach ($user->posts as $post) {
+  echo $post->title;
+}
+        </code></pre></section>
+      </section>
+
+      <section>
+        <section><h2>ORMs populares por lenguaje</h2></section>
+        <section>
+          <ul>
+            <li><strong>PHP:</strong> Eloquent (Laravel)</li>
+            <li><strong>Python:</strong> SQLAlchemy, Django ORM</li>
+            <li><strong>JavaScript:</strong> Sequelize, Prisma</li>
+            <li><strong>Java:</strong> Hibernate</li>
+            <li><strong>Ruby:</strong> ActiveRecord</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section><h2>¿Cuándo NO usar un ORM?</h2></section>
+        <section>
+          <ul>
+            <li>Consultas complejas y optimizadas</li>
+            <li>Procesamiento masivo</li>
+            <li>Requiere control preciso de SQL</li>
+            <li>Uso de bases no relacionales</li>
+          </ul>
+        </section>
+      </section>
+
+    </div>
+  </div>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/reveal.js/4.3.1/reveal.min.js"></script>
+  <script>
+    Reveal.initialize();
+  </script>
+</body>
+</html>
